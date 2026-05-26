@@ -222,7 +222,7 @@ def main() -> int:
         results = [queue.get()]
     else:
         context = mp.get_context("spawn")
-        queue = context.Queue()
+        result_queue = context.Queue()
         processes = [
             context.Process(
                 target=run_worker,
@@ -233,7 +233,7 @@ def main() -> int:
                     args.size,
                     args.dtype,
                     args.log_every,
-                    queue,
+                    result_queue,
                 ),
             )
             for index, device_spec in enumerate(device_specs)
@@ -245,7 +245,7 @@ def main() -> int:
         results = []
         while len(results) < len(processes):
             try:
-                results.append(queue.get(timeout=5))
+                results.append(result_queue.get(timeout=5))
                 continue
             except queue.Empty:
                 failed = [process.exitcode for process in processes if process.exitcode]
