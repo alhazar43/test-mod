@@ -82,6 +82,8 @@ class TinyGPT(nn.Module):
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Synthetic transformer training benchmark.")
     parser.add_argument("--seconds", type=int, default=int(os.environ.get("DL_SECONDS", "300")))
+    parser.add_argument("--warmup-steps", type=int, default=int(os.environ.get("DL_WARMUP_STEPS", "10")))
+    parser.add_argument("--measure-steps", type=int, default=int(os.environ.get("DL_MEASURE_STEPS", "100")))
     parser.add_argument("--batch-size", type=int, default=int(os.environ.get("DL_BATCH_SIZE", "4")))
     parser.add_argument("--seq-len", type=int, default=int(os.environ.get("DL_SEQ_LEN", "1024")))
     parser.add_argument("--vocab-size", type=int, default=int(os.environ.get("DL_VOCAB_SIZE", "32768")))
@@ -177,11 +179,14 @@ def run_worker(
 
     start = time.monotonic()
     deadline = start + args.seconds
+    measure_start = 0.0
+    measure_elapsed = 0.0
     steps = 0
-    total_tokens = 0
+    measured_steps = 0
+    measured_tokens = 0
     last_loss = 0.0
 
-    while time.monotonic() < deadline:
+    while time.monotonic() < deadline and measured_steps < args.measure_steps:
         tokens = torch.randint(
             0,
             args.vocab_size,
@@ -206,16 +211,26 @@ def run_worker(
         scaler.update()
 
         steps += 1
-        total_tokens += args.batch_size * args.seq_len
         last_loss = float(loss.detach().cpu())
+
+        if steps == args.warmup_steps:
+            if device.type == "cuda":
+                torch.cuda.synchronize(device)
+            measure_start = time.monotonic()
+
+        if steps > args.warmup_steps:
+            measured_steps += 1
+            measured_tokens += args.batch_size * args.seq_len
 
         if args.log_every > 0 and steps % args.log_every == 0:
             if device.type == "cuda":
                 torch.cuda.synchronize(device)
-            elapsed = time.monotonic() - start
+            elapsed = time.monotonic() - (measure_start or start)
+            tokens_per_sec = measured_tokens / elapsed if measured_tokens and elapsed > 0 else 0.0
             print(
                 f"worker={worker_id} device={device_spec} steps={steps} "
-                f"elapsed={elapsed:.1f}s tokens_per_sec={total_tokens / elapsed:.1f} "
+                f"measured_steps={measured_steps} elapsed={elapsed:.1f}s "
+                f"tokens_per_sec={tokens_per_sec:.1f} "
                 f"loss={last_loss:.4f}",
                 flush=True,
             )
@@ -223,14 +238,19 @@ def run_worker(
     if device.type == "cuda":
         torch.cuda.synchronize(device)
 
+    if measure_start:
+        measure_elapsed = time.monotonic() - measure_start
     elapsed = time.monotonic() - start
     result: dict[str, Any] = {
         "worker_id": worker_id,
         "device": device_spec,
         "steps": steps,
-        "tokens": total_tokens,
+        "warmup_steps": args.warmup_steps,
+        "measured_steps": measured_steps,
+        "tokens": measured_tokens,
         "elapsed_seconds": elapsed,
-        "tokens_per_second": total_tokens / elapsed if elapsed > 0 else 0.0,
+        "measure_elapsed_seconds": measure_elapsed,
+        "tokens_per_second": measured_tokens / measure_elapsed if measure_elapsed > 0 else 0.0,
         "last_loss": last_loss,
         "parameters": count_parameters(model),
     }
@@ -261,7 +281,8 @@ def main() -> int:
     print(f"devices={','.join(device_specs)}", flush=True)
     print(
         f"seconds={args.seconds} batch_size={args.batch_size} seq_len={args.seq_len} "
-        f"d_model={args.d_model} layers={args.layers} heads={args.heads} dtype={args.dtype}",
+        f"d_model={args.d_model} layers={args.layers} heads={args.heads} dtype={args.dtype} "
+        f"warmup_steps={args.warmup_steps} measure_steps={args.measure_steps}",
         flush=True,
     )
     for item in metadata:
@@ -311,6 +332,8 @@ def main() -> int:
         "slurm_job_nodelist": os.environ.get("SLURM_JOB_NODELIST"),
         "cuda_visible_devices": os.environ.get("CUDA_VISIBLE_DEVICES"),
         "seconds": args.seconds,
+        "warmup_steps": args.warmup_steps,
+        "measure_steps": args.measure_steps,
         "batch_size": args.batch_size,
         "seq_len": args.seq_len,
         "vocab_size": args.vocab_size,

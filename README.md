@@ -293,6 +293,30 @@ Compare DL results:
 python scripts/compare_results.py results/dl-model-comparison --markdown
 ```
 
+For a more rigorous A100 vs L40S comparison, run repeated heavier jobs with
+warmup excluded from measurement:
+
+```bash
+EXPERIMENT_NAME=dl-rigorous-a100-l40s REPEATS=3 \
+  DL_SECONDS=900 DL_WARMUP_STEPS=20 DL_MEASURE_STEPS=200 \
+  DL_BATCH_SIZE=8 DL_LAYERS=16 \
+  bash scripts/submit_dl_repeats.sh
+```
+
+This submits A100 and L40S jobs for each repeat. Your `guest-research` QOS
+allows at most two GPUs at once, so Slurm may keep some repeats pending until
+earlier jobs finish. Monitor with:
+
+```bash
+squeue -u yuanw
+```
+
+Summarize repeated results with mean and standard deviation:
+
+```bash
+python scripts/summarize_results.py results/dl-rigorous-a100-l40s --markdown
+```
+
 Commit and push DL results the same way:
 
 ```bash

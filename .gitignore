@@ -7,6 +7,8 @@ venv/
 gpu_*.out
 gpu_*.err
 gpu_*_nvidia_smi.csv
+dl_*.out
+dl_*.err
 slurm-*.out
 
 # Keep curated experiment artifacts in results/ tracked.

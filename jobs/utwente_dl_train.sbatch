@@ -48,6 +48,8 @@ env_file="${result_dir}/environment.txt"
   echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST}"
   echo "SLURM_JOB_GPUS=${SLURM_JOB_GPUS:-}"
   echo "DL_SECONDS=${DL_SECONDS:-300}"
+  echo "DL_WARMUP_STEPS=${DL_WARMUP_STEPS:-10}"
+  echo "DL_MEASURE_STEPS=${DL_MEASURE_STEPS:-100}"
   echo "DL_BATCH_SIZE=${DL_BATCH_SIZE:-4}"
   echo "DL_SEQ_LEN=${DL_SEQ_LEN:-1024}"
   echo "DL_D_MODEL=${DL_D_MODEL:-1024}"
@@ -83,6 +85,8 @@ trap 'kill "${monitor_pid}" 2>/dev/null || true' EXIT
 
 "${PYTHON_BIN}" scripts/dl_train_benchmark.py \
   --seconds "${DL_SECONDS:-300}" \
+  --warmup-steps "${DL_WARMUP_STEPS:-10}" \
+  --measure-steps "${DL_MEASURE_STEPS:-100}" \
   --batch-size "${DL_BATCH_SIZE:-4}" \
   --seq-len "${DL_SEQ_LEN:-1024}" \
   --vocab-size "${DL_VOCAB_SIZE:-32768}" \
