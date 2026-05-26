@@ -13,7 +13,10 @@ run GPU-heavy work directly on a login/head node.
 ## Files
 
 - `scripts/gpu_stress.py`: configurable PyTorch GPU workload.
+- `scripts/dl_train_benchmark.py`: synthetic transformer training benchmark.
 - `jobs/utwente_gpu_stress.sbatch`: Slurm submission script for `main-gpu`.
+- `jobs/utwente_dl_train.sbatch`: Slurm submission script for transformer
+  training benchmarks.
 - `jobs/gpu_probe.sbatch`: minimal Slurm job that checks `nvidia-smi` on a GPU
   node.
 - `requirements.txt`: CUDA-enabled PyTorch wheel dependency.
@@ -232,6 +235,71 @@ is actually parallelized across GPUs. This benchmark uses one worker process per
 allocated GPU, which is an embarrassingly parallel scaling test. A real model or
 simulation may need data parallelism, model parallelism, or domain decomposition
 to get similar speedup.
+
+## Deep Learning Training Benchmark
+
+The matrix benchmark measures raw tensor throughput. For a more realistic deep
+learning workload, use the synthetic transformer training benchmark. It performs
+embedding lookup, causal self-attention, MLP layers, cross-entropy loss,
+backpropagation, and AdamW optimizer steps. It uses synthetic token batches, so
+there is no dataset download.
+
+Run a short smoke test on one A100:
+
+```bash
+EXPERIMENT_NAME=dl-smoke-a100 DL_SECONDS=120 \
+  sbatch --job-name dl-a100-smoke --gres=gpu:ampere:1 --constraint=a100 \
+  jobs/utwente_dl_train.sbatch
+```
+
+Run comparable single-GPU DL benchmarks:
+
+```bash
+EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
+  sbatch --job-name dl-a100-1 --gres=gpu:ampere:1 --constraint=a100 \
+  jobs/utwente_dl_train.sbatch
+
+EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
+  sbatch --job-name dl-l40s-1 --gres=gpu:lovelace:1 --constraint=l40s \
+  jobs/utwente_dl_train.sbatch
+
+EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
+  sbatch --job-name dl-l40-1 --gres=gpu:lovelace:1 --constraint=l40 \
+  jobs/utwente_dl_train.sbatch
+
+EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
+  sbatch --job-name dl-a40-1 --gres=gpu:ampere:1 --constraint=a40 \
+  jobs/utwente_dl_train.sbatch
+```
+
+The default transformer workload is:
+
+```text
+batch_size=4, seq_len=1024, vocab_size=32768, d_model=1024,
+layers=12, heads=16, dtype=float16
+```
+
+For a heavier model, increase batch size or depth after the smoke run:
+
+```bash
+EXPERIMENT_NAME=dl-heavy-a100 DL_SECONDS=300 DL_BATCH_SIZE=8 DL_LAYERS=16 \
+  sbatch --job-name dl-a100-heavy --gres=gpu:ampere:1 --constraint=a100 \
+  jobs/utwente_dl_train.sbatch
+```
+
+Compare DL results:
+
+```bash
+python scripts/compare_results.py results/dl-model-comparison --markdown
+```
+
+Commit and push DL results the same way:
+
+```bash
+git add results/dl-model-comparison
+git commit -m "Add deep learning GPU benchmark results"
+git push origin main
+```
 
 ## Requesting More GPUs
 
