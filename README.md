@@ -181,6 +181,58 @@ GPU_STRESS_SECONDS=1800 GPU_STRESS_SIZE=12288 sbatch jobs/utwente_gpu_stress.sba
 Larger `GPU_STRESS_SIZE` values use more GPU memory and compute. If the job runs
 out of memory, reduce the size.
 
+## Scaling Experiment Scheme
+
+Use this when the question is whether two GPUs make this workload faster than
+one GPU. The helper submits matched 1-GPU and 2-GPU jobs with the same matrix
+size, dtype, duration, CUDA module, and Python environment:
+
+```bash
+cd ~/test-mod
+git pull
+. .venv/bin/activate
+GPU_STRESS_SECONDS=300 GPU_STRESS_SIZE=8192 GPU_FAMILY=lovelace \
+  bash scripts/submit_scaling_experiment.sh
+```
+
+This creates:
+
+```text
+results/<experiment-name>/manifest.tsv
+results/<experiment-name>/<jobid>_<jobname>/summary.json
+results/<experiment-name>/<jobid>_<jobname>/nvidia_smi.csv
+results/<experiment-name>/<jobid>_<jobname>/environment.txt
+```
+
+After both jobs complete:
+
+```bash
+squeue -u yuanw
+python scripts/compare_results.py results/<experiment-name> --markdown
+```
+
+Then commit the result artifacts from the HPC login node:
+
+```bash
+git add results/<experiment-name>
+git commit -m "Add GPU scaling results"
+git push origin main
+```
+
+On your local machine:
+
+```bash
+git pull
+python scripts/compare_results.py results/<experiment-name> --markdown
+```
+
+The script reports aggregate TFLOPS and speedup relative to the smallest GPU
+count in the result set. More GPUs only mean faster computation when the workload
+is actually parallelized across GPUs. This benchmark uses one worker process per
+allocated GPU, which is an embarrassingly parallel scaling test. A real model or
+simulation may need data parallelism, model parallelism, or domain decomposition
+to get similar speedup.
+
 ## Requesting More GPUs
 
 The UT wiki documents GPU requests as `gpu[:family]:amount`. The current default
@@ -224,6 +276,13 @@ sbatch --gres=gpu:lovelace:2 --sockets-per-node=1 jobs/utwente_gpu_stress.sbatch
 
 Queue time may increase when requesting more GPUs because Slurm must find one
 node with enough free GPUs.
+
+`lovelace` is a GPU family, not a claim that it is the strongest GPU available.
+On the UT hardware page, the main shared GPU partition includes many L40/L40S
+nodes, and those are Lovelace-generation GPUs. Stronger or larger-memory devices
+may exist under other features or restricted partitions, for example H200NVL or
+RTX6000Pro nodes, but access depends on partition/account permissions and current
+availability. For fair 1-vs-2 scaling, keep the GPU family/model fixed.
 
 Control the diagnostics cadence:
 

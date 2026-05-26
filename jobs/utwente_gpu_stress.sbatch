@@ -19,6 +19,7 @@ echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST}"
 echo "GPU_MONITOR_INTERVAL=${GPU_MONITOR_INTERVAL:-5}"
 echo "PYTHON_MODULE=${PYTHON_MODULE:-python/3.10.7}"
 echo "CUDA_MODULE=${CUDA_MODULE:-nvidia/cuda-11.0}"
+echo "EXPERIMENT_NAME=${EXPERIMENT_NAME:-manual}"
 
 cd "${SLURM_SUBMIT_DIR}"
 
@@ -36,7 +37,29 @@ echo "Python: $(${PYTHON_BIN} --version)"
 "${PYTHON_BIN}" -c "import torch; print('torch', torch.__version__); print('torch_cuda_runtime', torch.version.cuda); print('torch_cuda_available', torch.cuda.is_available())"
 nvidia-smi
 
-gpu_monitor_file="gpu_${SLURM_JOB_ID}_nvidia_smi.csv"
+result_dir="${RESULTS_ROOT:-results}/${EXPERIMENT_NAME:-manual}/${SLURM_JOB_ID}_${SLURM_JOB_NAME}"
+mkdir -p "${result_dir}"
+
+gpu_monitor_file="${result_dir}/nvidia_smi.csv"
+summary_file="${result_dir}/summary.json"
+env_file="${result_dir}/environment.txt"
+
+{
+  echo "Date: $(date)"
+  echo "Node: $(hostname)"
+  echo "Submit dir: ${SLURM_SUBMIT_DIR}"
+  echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-}"
+  echo "SLURM_JOB_ID=${SLURM_JOB_ID}"
+  echo "SLURM_JOB_NAME=${SLURM_JOB_NAME}"
+  echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST}"
+  echo "SLURM_GPUS=${SLURM_GPUS:-}"
+  echo "SLURM_GPUS_ON_NODE=${SLURM_GPUS_ON_NODE:-}"
+  echo "SLURM_JOB_GPUS=${SLURM_JOB_GPUS:-}"
+  echo "PYTHON_MODULE=${PYTHON_MODULE:-python/3.10.7}"
+  echo "CUDA_MODULE=${CUDA_MODULE:-nvidia/cuda-11.0}"
+  module list
+} > "${env_file}" 2>&1
+
 gpu_monitor_args=()
 if [ -n "${CUDA_VISIBLE_DEVICES:-}" ]; then
   gpu_monitor_args=(-i "${CUDA_VISIBLE_DEVICES}")
@@ -64,10 +87,13 @@ trap 'kill "${monitor_pid}" 2>/dev/null || true' EXIT
   --size "${GPU_STRESS_SIZE:-8192}" \
   --dtype "${GPU_STRESS_DTYPE:-float16}" \
   --devices "${GPU_STRESS_DEVICES:-auto}" \
-  --log-every "${GPU_STRESS_LOG_EVERY:-10}"
+  --log-every "${GPU_STRESS_LOG_EVERY:-100}" \
+  --output-json "${summary_file}"
 
 kill "${monitor_pid}" 2>/dev/null || true
 trap - EXIT
 
 echo "GPU monitor samples: ${gpu_monitor_file}"
 tail -n 10 "${gpu_monitor_file}"
+echo "Result directory: ${result_dir}"
+echo "Summary JSON: ${summary_file}"
