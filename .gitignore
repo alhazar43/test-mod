@@ -1,0 +1,20 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Slurm and GPU benchmark output
+gpu_*.out
+gpu_*.err
+gpu_*_nvidia_smi.csv
+slurm-*.out
+
+# Large experiment artifacts
+data/
+datasets/
+checkpoints/
+runs/
+wandb/
+*.pt
+*.pth
+*.ckpt
