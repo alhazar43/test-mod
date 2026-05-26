@@ -7,7 +7,7 @@ import argparse
 import json
 import multiprocessing as mp
 import os
-import queue
+import queue as queue_module
 import time
 from pathlib import Path
 from typing import Any
@@ -119,7 +119,7 @@ def run_worker(
     size: int,
     dtype_name: str,
     log_every: int,
-    queue: mp.Queue,
+    result_queue: mp.Queue,
 ) -> None:
     device = torch.device(device_spec)
     dtype = dtype_from_name(dtype_name)
@@ -179,7 +179,7 @@ def run_worker(
             }
         )
 
-    queue.put(result)
+    result_queue.put(result)
 
 
 def write_summary(path: str | None, summary: dict[str, Any]) -> None:
@@ -217,9 +217,9 @@ def main() -> int:
     wall_start = time.monotonic()
 
     if len(device_specs) == 1 and device_specs[0] == "cpu":
-        queue: mp.Queue = mp.Queue()
-        run_worker(0, "cpu", args.seconds, args.size, args.dtype, args.log_every, queue)
-        results = [queue.get()]
+        result_queue: mp.Queue = mp.Queue()
+        run_worker(0, "cpu", args.seconds, args.size, args.dtype, args.log_every, result_queue)
+        results = [result_queue.get()]
     else:
         context = mp.get_context("spawn")
         result_queue = context.Queue()
@@ -247,7 +247,7 @@ def main() -> int:
             try:
                 results.append(result_queue.get(timeout=5))
                 continue
-            except queue.Empty:
+            except queue_module.Empty:
                 failed = [process.exitcode for process in processes if process.exitcode]
                 if failed:
                     for process in processes:
