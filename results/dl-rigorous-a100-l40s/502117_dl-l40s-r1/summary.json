@@ -1,0 +1,53 @@
+{
+  "batch_size": 8,
+  "benchmark_type": "synthetic_transformer_training",
+  "cuda_visible_devices": "0",
+  "d_model": 1024,
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "8.9",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 142,
+      "name": "NVIDIA L40S",
+      "total_memory_gib": 44.39404296875,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "heads": 16,
+  "layers": 16,
+  "measure_steps": 200,
+  "metric_name": "tokens_per_second",
+  "metric_value": 60471.939744222414,
+  "mlp_ratio": 4,
+  "parameters": 236079104,
+  "schema_version": 1,
+  "seconds": 900,
+  "seq_len": 1024,
+  "slurm_job_id": "502117",
+  "slurm_job_name": "dl-l40s-r1",
+  "slurm_job_nodelist": "hpc-node17",
+  "tokens_per_second": 60471.939744222414,
+  "vocab_size": 32768,
+  "wall_elapsed_seconds": 51.140122740063816,
+  "warmup_steps": 20,
+  "workers": [
+    {
+      "device": "cuda:0",
+      "elapsed_seconds": 32.29454399086535,
+      "last_loss": 24.166648864746094,
+      "measure_elapsed_seconds": 27.09355788701214,
+      "measured_steps": 200,
+      "parameters": 236079104,
+      "peak_allocated_gib": 10.648687362670898,
+      "peak_reserved_gib": 10.919921875,
+      "steps": 220,
+      "tokens": 1638400,
+      "tokens_per_second": 60471.939744222414,
+      "warmup_steps": 20,
+      "worker_id": 0
+    }
+  ]
+}

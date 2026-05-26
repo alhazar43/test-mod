@@ -1,0 +1,7 @@
+label	job_id	gres	constraint	repeat	batch_size	seq_len	d_model	layers	warmup_steps	measure_steps	dtype
+dl-a100	502116	gpu:ampere:1	a100	1	8	1024	1024	16	20	200	float16
+dl-l40s	502117	gpu:lovelace:1	l40s	1	8	1024	1024	16	20	200	float16
+dl-a100	502118	gpu:ampere:1	a100	2	8	1024	1024	16	20	200	float16
+dl-l40s	502119	gpu:lovelace:1	l40s	2	8	1024	1024	16	20	200	float16
+dl-a100	502120	gpu:ampere:1	a100	3	8	1024	1024	16	20	200	float16
+dl-l40s	502121	gpu:lovelace:1	l40s	3	8	1024	1024	16	20	200	float16
