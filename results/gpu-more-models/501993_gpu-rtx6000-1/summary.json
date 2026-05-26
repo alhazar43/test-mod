@@ -1,0 +1,37 @@
+{
+  "aggregate_tflops": 81.71973292015733,
+  "cuda_visible_devices": "1",
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "7.5",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 72,
+      "name": "Quadro RTX 6000",
+      "total_memory_gib": 21.9737548828125,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "matrix_memory_per_tensor_gib": 0.125,
+  "schema_version": 1,
+  "seconds": 300,
+  "size": 8192,
+  "slurm_job_id": "501993",
+  "slurm_job_name": "gpu-rtx6000-1",
+  "slurm_job_nodelist": "ctit085",
+  "wall_elapsed_seconds": 303.45190906501375,
+  "workers": [
+    {
+      "avg_tflops": 81.71973292015733,
+      "device": "cuda:0",
+      "elapsed_seconds": 300.039028803003,
+      "iterations": 22300,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 0
+    }
+  ],
+  "working_set_total_gib": 0.375
+}

@@ -1,0 +1,37 @@
+{
+  "aggregate_tflops": 37.81669905948487,
+  "cuda_visible_devices": "2",
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "7.5",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 46,
+      "name": "NVIDIA GeForce RTX 2080",
+      "total_memory_gib": 7.603759765625,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "matrix_memory_per_tensor_gib": 0.125,
+  "schema_version": 1,
+  "seconds": 300,
+  "size": 8192,
+  "slurm_job_id": "502003",
+  "slurm_job_name": "gpu-a4500-1",
+  "slurm_job_nodelist": "ctit088",
+  "wall_elapsed_seconds": 304.7912083460251,
+  "workers": [
+    {
+      "avg_tflops": 37.81669905948487,
+      "device": "cuda:0",
+      "elapsed_seconds": 302.3775531249703,
+      "iterations": 10400,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 0
+    }
+  ],
+  "working_set_total_gib": 0.375
+}
