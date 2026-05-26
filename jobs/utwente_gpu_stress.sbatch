@@ -20,9 +20,14 @@ echo "GPU_MONITOR_INTERVAL=${GPU_MONITOR_INTERVAL:-5}"
 
 cd "${SLURM_SUBMIT_DIR}"
 
-# UT currently exposes Python modules but no CUDA module on the login node.
-# PyTorch CUDA wheels bundle the CUDA runtime; the GPU node provides the driver.
 module load "${PYTHON_MODULE:-python/3.10.7}"
+
+# CUDA toolkit modules are optional for this PyTorch wheel job. Load one only if
+# you need nvcc or custom CUDA extensions, for example:
+#   CUDA_MODULE=nvidia/cuda-11.0 sbatch jobs/utwente_gpu_stress.sbatch
+if [ -n "${CUDA_MODULE:-}" ]; then
+  module load "${CUDA_MODULE}"
+fi
 
 if [ -x ".venv/bin/python" ]; then
   PYTHON_BIN=".venv/bin/python"

@@ -32,16 +32,18 @@ Connect to the login node:
 ssh <ut-username>@hpc-head1.ewi.utwente.nl
 ```
 
-Inspect available Python modules:
+Inspect available modules:
 
 ```bash
+module avail
 module avail python
 ```
 
-At the time this was written, the login node exposed `python/3.7.3`,
-`python/3.9.9`, and `python/3.10.7`, but no CUDA module. That is fine for this
-job: CUDA-enabled PyTorch wheels bundle the CUDA runtime, and the allocated GPU
-compute node provides the NVIDIA driver.
+The cluster may expose CUDA toolkit modules such as `nvidia/cuda-11.0`. Those
+are useful when you need `nvcc` or need to build custom CUDA extensions. This
+PyTorch wheel job does not require loading a CUDA toolkit module: CUDA-enabled
+PyTorch wheels include the CUDA runtime, and the allocated GPU compute node
+provides the NVIDIA driver.
 
 Do not run `apt install`, and do not try to install NVIDIA drivers or system CUDA
 on `hpc-head1`. You normally do not have admin rights there, and the login node
@@ -74,6 +76,14 @@ python -m pip install -r requirements.txt
 This gives PyTorch a CUDA runtime without needing a system CUDA module. The
 official PyTorch installer documents this selector-based CUDA wheel workflow for
 Linux pip installs: https://pytorch.org/get-started/locally/
+
+If you later need a toolkit module for compiling CUDA code, pass it explicitly:
+
+```bash
+CUDA_MODULE=nvidia/cuda-11.0 sbatch jobs/utwente_gpu_stress.sbatch
+```
+
+For pure PyTorch runs, leave `CUDA_MODULE` unset.
 
 Submit the GPU job:
 
