@@ -14,7 +14,9 @@ run GPU-heavy work directly on a login/head node.
 
 - `scripts/gpu_stress.py`: configurable PyTorch GPU workload.
 - `jobs/utwente_gpu_stress.sbatch`: Slurm submission script for `main-gpu`.
-- `requirements.txt`: Python dependency list.
+- `jobs/gpu_probe.sbatch`: minimal Slurm job that checks `nvidia-smi` on a GPU
+  node.
+- `requirements.txt`: CUDA-enabled PyTorch wheel dependency.
 
 ## Quick Start With `rsync`
 
@@ -41,6 +43,22 @@ At the time this was written, the login node exposed `python/3.7.3`,
 job: CUDA-enabled PyTorch wheels bundle the CUDA runtime, and the allocated GPU
 compute node provides the NVIDIA driver.
 
+Do not run `apt install`, and do not try to install NVIDIA drivers or system CUDA
+on `hpc-head1`. You normally do not have admin rights there, and the login node
+is not the GPU node. It is expected that this fails on the login node:
+
+```bash
+nvidia-smi
+```
+
+Check `nvidia-smi` through Slurm instead:
+
+```bash
+cd ~/test-mod
+sbatch jobs/gpu_probe.sbatch
+tail -f gpu_probe_<jobid>.out
+```
+
 Create the Python environment once on the login node:
 
 ```bash
@@ -51,6 +69,11 @@ python3 -m venv .venv
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
 ```
+
+`requirements.txt` installs PyTorch from the official CUDA 11.8 wheel index.
+This gives PyTorch a CUDA runtime without needing a system CUDA module. The
+official PyTorch installer documents this selector-based CUDA wheel workflow for
+Linux pip installs: https://pytorch.org/get-started/locally/
 
 Submit the GPU job:
 
