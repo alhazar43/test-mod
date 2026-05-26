@@ -88,7 +88,7 @@ Compare results:
 python scripts/compare_results.py results/gpu-model-comparison --markdown
 ```
 
-## Benchmark: Transformer Training
+## Benchmark: Example Deep Learning Training
 
 Smoke test:
 
@@ -182,15 +182,25 @@ one.
 
 ## Adaptation Manual
 
-Use this section when turning a local PyTorch project into an HPC Slurm job.
-Environment and path details are intentionally left to the project owner.
+Use this section when turning any local GPU workload into an HPC Slurm job. This
+can be model training, evaluation, inference, simulation, rendering, or a custom
+analysis script. Environment and path details are intentionally left to the
+project owner.
 
-### 1. Make One Training Command
+### 1. Make One Runnable Command
 
-Your project should have one command that starts training:
+Your project should have one command that starts the workload:
 
 ```bash
 python train.py --config configs/train.yaml
+```
+
+Other valid examples:
+
+```bash
+python evaluate.py --checkpoint checkpoints/model.pt --split test
+python infer.py --input data/input --output outputs/run
+python simulate.py --config configs/experiment.yaml
 ```
 
 Keep local paths, dataset paths, and output paths configurable through CLI args,
@@ -198,17 +208,23 @@ config files, or environment variables.
 
 ### 2. Copy A Slurm Template
 
-Start from `jobs/utwente_dl_train.sbatch` and replace the benchmark command:
+Start from one of the job templates and replace the benchmark command.
+
+For training-like workloads, `jobs/utwente_dl_train.sbatch` is usually the
+closest template. Replace:
 
 ```bash
 "${PYTHON_BIN}" scripts/dl_train_benchmark.py ...
 ```
 
-with your training command:
+with your workload command:
 
 ```bash
 "${PYTHON_BIN}" train.py --config configs/train.yaml
 ```
+
+For lighter probes or non-training commands, `jobs/gpu_probe.sbatch` can be used
+as a minimal starting point.
 
 Keep the useful Slurm wrapper pieces:
 
@@ -241,7 +257,7 @@ Recommended artifacts:
 
 - `environment.txt`: modules, job ID, node, CUDA visibility.
 - `metrics.json` or `summary.json`: final metrics.
-- training logs/checkpoints as needed.
+- workload logs, checkpoints, predictions, or analysis outputs as needed.
 
 ### 4. Make GPU Use Explicit
 
@@ -257,10 +273,10 @@ For multiple GPUs, the code must explicitly support parallelism, for example
 DDP, FSDP, DeepSpeed, model parallelism, or domain decomposition. Requesting
 `--gres=gpu:2` alone does not make ordinary single-GPU code faster.
 
-### 5. Add Checkpoint/Resume
+### 5. Add Checkpoint/Resume Where Relevant
 
 HPC jobs can time out, fail, or be cancelled. Long jobs should periodically save
-state and support resume:
+state and support resume when the workload supports it:
 
 ```bash
 python train.py --config configs/train.yaml --resume <checkpoint>
