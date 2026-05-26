@@ -1,0 +1,3 @@
+label	job_id	gres	seconds	size	dtype
+gpu-scale-1	501830	gpu:lovelace:1	300	8192	float16
+gpu-scale-2	501831	gpu:lovelace:2	300	8192	float16

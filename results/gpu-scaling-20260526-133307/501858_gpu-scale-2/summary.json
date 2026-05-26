@@ -1,0 +1,55 @@
+{
+  "aggregate_tflops": 170.27383332755977,
+  "cuda_visible_devices": "0,1",
+  "device_count": 2,
+  "devices": [
+    {
+      "capability": "8.9",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 142,
+      "name": "NVIDIA L40",
+      "total_memory_gib": 44.39404296875,
+      "type": "cuda"
+    },
+    {
+      "capability": "8.9",
+      "device": "cuda:1",
+      "logical_index": 1,
+      "multiprocessors": 142,
+      "name": "NVIDIA L40",
+      "total_memory_gib": 44.39404296875,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "matrix_memory_per_tensor_gib": 0.125,
+  "schema_version": 1,
+  "seconds": 300,
+  "size": 8192,
+  "slurm_job_id": "501858",
+  "slurm_job_name": "gpu-scale-2",
+  "slurm_job_nodelist": "hpc-node06",
+  "wall_elapsed_seconds": 303.4948930779999,
+  "workers": [
+    {
+      "avg_tflops": 83.32566288362663,
+      "device": "cuda:0",
+      "elapsed_seconds": 300.8540735920001,
+      "iterations": 22800,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 0
+    },
+    {
+      "avg_tflops": 86.94817044393315,
+      "device": "cuda:1",
+      "elapsed_seconds": 300.96523719200013,
+      "iterations": 23800,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 1
+    }
+  ],
+  "working_set_total_gib": 0.75
+}
