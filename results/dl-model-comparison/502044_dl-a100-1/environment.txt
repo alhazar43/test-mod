@@ -1,0 +1,16 @@
+Date: Tue May 26 04:04:45 PM CEST 2026
+Node: ctit089
+CUDA_VISIBLE_DEVICES=3
+SLURM_JOB_ID=502044
+SLURM_JOB_NAME=dl-a100-1
+SLURM_JOB_NODELIST=ctit089
+SLURM_JOB_GPUS=3
+DL_SECONDS=300
+DL_BATCH_SIZE=4
+DL_SEQ_LEN=1024
+DL_D_MODEL=1024
+DL_LAYERS=12
+DL_HEADS=16
+DL_DTYPE=float16
+Currently Loaded Modulefiles:
+ 1) python/3.10.7   2) slurm/utils   3) monitor/node   4) nvidia/cuda-11.0  

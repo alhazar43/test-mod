@@ -1,0 +1,48 @@
+{
+  "batch_size": 4,
+  "benchmark_type": "synthetic_transformer_training",
+  "cuda_visible_devices": "3",
+  "d_model": 1024,
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "8.0",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 108,
+      "name": "NVIDIA A100-PCIE-40GB",
+      "total_memory_gib": 39.4935302734375,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "heads": 16,
+  "layers": 12,
+  "metric_name": "tokens_per_second",
+  "metric_value": 68497.32021761904,
+  "mlp_ratio": 4,
+  "parameters": 185710592,
+  "schema_version": 1,
+  "seconds": 300,
+  "seq_len": 1024,
+  "slurm_job_id": "502044",
+  "slurm_job_name": "dl-a100-1",
+  "slurm_job_nodelist": "ctit089",
+  "tokens_per_second": 68497.32021761904,
+  "vocab_size": 32768,
+  "wall_elapsed_seconds": 306.9414650797844,
+  "workers": [
+    {
+      "device": "cuda:0",
+      "elapsed_seconds": 300.0063642594032,
+      "last_loss": 10.618387222290039,
+      "parameters": 185710592,
+      "peak_allocated_gib": 5.649869918823242,
+      "peak_reserved_gib": 5.7421875,
+      "steps": 5017,
+      "tokens": 20549632,
+      "tokens_per_second": 68497.32021761904,
+      "worker_id": 0
+    }
+  ]
+}

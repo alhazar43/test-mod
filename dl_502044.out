@@ -1,0 +1,568 @@
+Date: Tue May 26 04:04:45 PM CEST 2026
+Node: ctit089
+Submit dir: /home/yuanw/test-mod
+CUDA_VISIBLE_DEVICES=3
+SLURM_JOB_ID=502044
+SLURM_JOB_NODELIST=ctit089
+PYTHON_MODULE=python/3.10.7
+CUDA_MODULE=nvidia/cuda-11.0
+EXPERIMENT_NAME=dl-model-comparison
+Currently Loaded Modulefiles:
+ 1) python/3.10.7   2) slurm/utils   3) monitor/node   4) nvidia/cuda-11.0  
+torch 2.7.1+cu118
+torch_cuda_runtime 11.8
+torch_cuda_available True
+Tue May 26 16:04:49 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.58.03              Driver Version: 595.58.03      CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA A100-PCIE-40GB          On  |   00000000:3B:00.0 Off |                    0 |
+| N/A   60C    P0            239W /  250W |   24849MiB /  40960MiB |     99%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   1  NVIDIA A100-PCIE-40GB          On  |   00000000:5E:00.0 Off |                    0 |
+| N/A   33C    P0             43W /  250W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   2  NVIDIA A100-PCIE-40GB          On  |   00000000:B1:00.0 Off |                    0 |
+| N/A   40C    P0             68W /  250W |    8593MiB /  40960MiB |     13%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+|   3  NVIDIA A100-PCIE-40GB          On  |   00000000:D9:00.0 Off |                    0 |
+| N/A   34C    P0             43W /  250W |       0MiB /  40960MiB |      0%      Default |
+|                                         |                        |             Disabled |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|    0   N/A  N/A         3603427      C   .../anaconda3/2025.06/bin/python       6052MiB |
+|    0   N/A  N/A         3613314      C   ...f/.conda/envs/yolo/bin/python      18780MiB |
+|    2   N/A  N/A         3603426      C   .../anaconda3/2025.06/bin/python       8584MiB |
++-----------------------------------------------------------------------------------------+
+CUDA_VISIBLE_DEVICES=3
+devices=cuda:0
+seconds=300 batch_size=4 seq_len=1024 d_model=1024 layers=12 heads=16 dtype=float16
+device_metadata={"capability": "8.0", "device": "cuda:0", "logical_index": 0, "multiprocessors": 108, "name": "NVIDIA A100-PCIE-40GB", "total_memory_gib": 39.4935302734375, "type": "cuda"}
+worker=0 device=cuda:0 steps=10 elapsed=1.0s tokens_per_sec=40827.3 loss=105.2558
+worker=0 device=cuda:0 steps=20 elapsed=1.5s tokens_per_sec=53148.9 loss=90.0417
+worker=0 device=cuda:0 steps=30 elapsed=2.1s tokens_per_sec=59049.2 loss=79.9705
+worker=0 device=cuda:0 steps=40 elapsed=2.7s tokens_per_sec=61760.4 loss=73.6274
+worker=0 device=cuda:0 steps=50 elapsed=3.2s tokens_per_sec=63176.8 loss=67.9448
+worker=0 device=cuda:0 steps=60 elapsed=3.8s tokens_per_sec=64108.1 loss=62.9688
+worker=0 device=cuda:0 steps=70 elapsed=4.4s tokens_per_sec=64824.9 loss=59.5623
+worker=0 device=cuda:0 steps=80 elapsed=5.0s tokens_per_sec=65380.1 loss=57.0193
+worker=0 device=cuda:0 steps=90 elapsed=5.6s tokens_per_sec=65818.4 loss=54.0801
+worker=0 device=cuda:0 steps=100 elapsed=6.2s tokens_per_sec=66159.2 loss=50.3496
+worker=0 device=cuda:0 steps=110 elapsed=6.8s tokens_per_sec=66434.7 loss=47.1584
+worker=0 device=cuda:0 steps=120 elapsed=7.4s tokens_per_sec=66824.7 loss=45.0882
+worker=0 device=cuda:0 steps=130 elapsed=7.9s tokens_per_sec=67022.5 loss=42.4730
+worker=0 device=cuda:0 steps=140 elapsed=8.5s tokens_per_sec=67185.7 loss=40.2343
+worker=0 device=cuda:0 steps=150 elapsed=9.1s tokens_per_sec=67325.6 loss=38.6060
+worker=0 device=cuda:0 steps=160 elapsed=9.7s tokens_per_sec=67446.8 loss=36.3369
+worker=0 device=cuda:0 steps=170 elapsed=10.3s tokens_per_sec=67557.4 loss=33.9771
+worker=0 device=cuda:0 steps=180 elapsed=10.9s tokens_per_sec=67657.2 loss=32.0096
+worker=0 device=cuda:0 steps=190 elapsed=11.5s tokens_per_sec=67725.2 loss=31.4359
+worker=0 device=cuda:0 steps=200 elapsed=12.1s tokens_per_sec=67805.0 loss=29.5552
+worker=0 device=cuda:0 steps=210 elapsed=12.7s tokens_per_sec=67985.0 loss=28.8123
+worker=0 device=cuda:0 steps=220 elapsed=13.2s tokens_per_sec=68044.5 loss=26.9077
+worker=0 device=cuda:0 steps=230 elapsed=13.8s tokens_per_sec=68121.8 loss=26.0322
+worker=0 device=cuda:0 steps=240 elapsed=14.4s tokens_per_sec=68391.1 loss=25.6284
+worker=0 device=cuda:0 steps=250 elapsed=14.9s tokens_per_sec=68636.0 loss=23.5869
+worker=0 device=cuda:0 steps=260 elapsed=15.5s tokens_per_sec=68863.6 loss=23.0804
+worker=0 device=cuda:0 steps=270 elapsed=16.0s tokens_per_sec=69076.1 loss=22.1074
+worker=0 device=cuda:0 steps=280 elapsed=16.6s tokens_per_sec=69276.0 loss=21.5439
+worker=0 device=cuda:0 steps=290 elapsed=17.1s tokens_per_sec=69460.4 loss=20.7575
+worker=0 device=cuda:0 steps=300 elapsed=17.6s tokens_per_sec=69634.7 loss=20.0798
+worker=0 device=cuda:0 steps=310 elapsed=18.2s tokens_per_sec=69794.4 loss=19.3951
+worker=0 device=cuda:0 steps=320 elapsed=18.7s tokens_per_sec=69944.6 loss=19.3979
+worker=0 device=cuda:0 steps=330 elapsed=19.3s tokens_per_sec=70090.0 loss=18.4561
+worker=0 device=cuda:0 steps=340 elapsed=19.8s tokens_per_sec=70225.0 loss=18.1720
+worker=0 device=cuda:0 steps=350 elapsed=20.4s tokens_per_sec=70351.2 loss=17.1854
+worker=0 device=cuda:0 steps=360 elapsed=20.9s tokens_per_sec=70470.2 loss=17.2001
+worker=0 device=cuda:0 steps=370 elapsed=21.5s tokens_per_sec=70587.2 loss=16.4829
+worker=0 device=cuda:0 steps=380 elapsed=22.0s tokens_per_sec=70695.2 loss=16.5149
+worker=0 device=cuda:0 steps=390 elapsed=22.6s tokens_per_sec=70795.3 loss=15.8372
+worker=0 device=cuda:0 steps=400 elapsed=23.1s tokens_per_sec=70894.4 loss=15.8900
+worker=0 device=cuda:0 steps=410 elapsed=23.7s tokens_per_sec=70984.5 loss=15.4385
+worker=0 device=cuda:0 steps=420 elapsed=24.2s tokens_per_sec=71075.0 loss=14.9859
+worker=0 device=cuda:0 steps=430 elapsed=24.8s tokens_per_sec=71161.5 loss=14.5601
+worker=0 device=cuda:0 steps=440 elapsed=25.3s tokens_per_sec=71237.4 loss=14.7142
+worker=0 device=cuda:0 steps=450 elapsed=25.8s tokens_per_sec=71317.3 loss=13.8927
+worker=0 device=cuda:0 steps=460 elapsed=26.4s tokens_per_sec=71387.8 loss=13.9611
+worker=0 device=cuda:0 steps=470 elapsed=26.9s tokens_per_sec=71456.9 loss=14.0408
+worker=0 device=cuda:0 steps=480 elapsed=27.5s tokens_per_sec=71522.5 loss=13.5504
+worker=0 device=cuda:0 steps=490 elapsed=28.0s tokens_per_sec=71585.9 loss=13.2014
+worker=0 device=cuda:0 steps=500 elapsed=28.6s tokens_per_sec=71642.2 loss=13.1216
+worker=0 device=cuda:0 steps=510 elapsed=29.1s tokens_per_sec=71700.0 loss=13.2600
+worker=0 device=cuda:0 steps=520 elapsed=29.7s tokens_per_sec=71757.5 loss=13.0719
+worker=0 device=cuda:0 steps=530 elapsed=30.2s tokens_per_sec=71808.2 loss=12.7932
+worker=0 device=cuda:0 steps=540 elapsed=30.8s tokens_per_sec=71857.9 loss=12.5953
+worker=0 device=cuda:0 steps=550 elapsed=31.3s tokens_per_sec=71906.4 loss=12.4340
+worker=0 device=cuda:0 steps=560 elapsed=31.9s tokens_per_sec=71951.5 loss=12.2573
+worker=0 device=cuda:0 steps=570 elapsed=32.4s tokens_per_sec=71998.5 loss=12.3301
+worker=0 device=cuda:0 steps=580 elapsed=33.0s tokens_per_sec=72041.2 loss=12.1605
+worker=0 device=cuda:0 steps=590 elapsed=33.5s tokens_per_sec=72082.7 loss=12.0478
+worker=0 device=cuda:0 steps=600 elapsed=34.1s tokens_per_sec=72124.5 loss=11.9084
+worker=0 device=cuda:0 steps=610 elapsed=34.6s tokens_per_sec=72161.7 loss=11.8112
+worker=0 device=cuda:0 steps=620 elapsed=35.2s tokens_per_sec=72199.3 loss=11.7870
+worker=0 device=cuda:0 steps=630 elapsed=35.7s tokens_per_sec=72236.2 loss=11.7193
+worker=0 device=cuda:0 steps=640 elapsed=36.3s tokens_per_sec=72270.7 loss=11.6684
+worker=0 device=cuda:0 steps=650 elapsed=36.8s tokens_per_sec=72304.9 loss=11.4925
+worker=0 device=cuda:0 steps=660 elapsed=37.4s tokens_per_sec=72335.0 loss=11.5210
+worker=0 device=cuda:0 steps=670 elapsed=37.9s tokens_per_sec=72363.3 loss=11.5061
+worker=0 device=cuda:0 steps=680 elapsed=38.5s tokens_per_sec=72394.3 loss=11.4369
+worker=0 device=cuda:0 steps=690 elapsed=39.0s tokens_per_sec=72423.7 loss=11.4149
+worker=0 device=cuda:0 steps=700 elapsed=39.6s tokens_per_sec=72451.0 loss=11.3377
+worker=0 device=cuda:0 steps=710 elapsed=40.1s tokens_per_sec=72476.5 loss=11.3494
+worker=0 device=cuda:0 steps=720 elapsed=40.7s tokens_per_sec=72502.9 loss=11.2495
+worker=0 device=cuda:0 steps=730 elapsed=41.2s tokens_per_sec=72529.6 loss=11.2055
+worker=0 device=cuda:0 steps=740 elapsed=41.8s tokens_per_sec=72551.9 loss=11.1619
+worker=0 device=cuda:0 steps=750 elapsed=42.3s tokens_per_sec=72575.1 loss=11.1475
+worker=0 device=cuda:0 steps=760 elapsed=42.9s tokens_per_sec=72599.3 loss=11.1418
+worker=0 device=cuda:0 steps=770 elapsed=43.4s tokens_per_sec=72621.5 loss=11.0659
+worker=0 device=cuda:0 steps=780 elapsed=44.0s tokens_per_sec=72640.2 loss=10.9497
+worker=0 device=cuda:0 steps=790 elapsed=44.5s tokens_per_sec=72663.1 loss=10.9483
+worker=0 device=cuda:0 steps=800 elapsed=45.1s tokens_per_sec=72681.1 loss=11.1023
+worker=0 device=cuda:0 steps=810 elapsed=45.6s tokens_per_sec=72696.5 loss=11.0406
+worker=0 device=cuda:0 steps=820 elapsed=46.2s tokens_per_sec=72713.6 loss=10.9191
+worker=0 device=cuda:0 steps=830 elapsed=46.7s tokens_per_sec=72729.4 loss=10.9488
+worker=0 device=cuda:0 steps=840 elapsed=47.3s tokens_per_sec=72742.8 loss=10.9108
+worker=0 device=cuda:0 steps=850 elapsed=47.9s tokens_per_sec=72757.6 loss=10.9495
+worker=0 device=cuda:0 steps=860 elapsed=48.4s tokens_per_sec=72769.5 loss=10.8551
+worker=0 device=cuda:0 steps=870 elapsed=49.0s tokens_per_sec=72780.0 loss=10.8668
+worker=0 device=cuda:0 steps=880 elapsed=49.5s tokens_per_sec=72792.1 loss=10.8131
+worker=0 device=cuda:0 steps=890 elapsed=50.1s tokens_per_sec=72804.2 loss=10.8509
+worker=0 device=cuda:0 steps=900 elapsed=50.6s tokens_per_sec=72809.7 loss=10.8458
+worker=0 device=cuda:0 steps=910 elapsed=51.2s tokens_per_sec=72764.6 loss=10.8267
+worker=0 device=cuda:0 steps=920 elapsed=51.8s tokens_per_sec=72716.4 loss=10.7827
+worker=0 device=cuda:0 steps=930 elapsed=52.4s tokens_per_sec=72667.8 loss=10.8230
+worker=0 device=cuda:0 steps=940 elapsed=53.0s tokens_per_sec=72620.6 loss=10.8132
+worker=0 device=cuda:0 steps=950 elapsed=53.6s tokens_per_sec=72574.6 loss=10.7767
+worker=0 device=cuda:0 steps=960 elapsed=54.2s tokens_per_sec=72529.5 loss=10.7607
+worker=0 device=cuda:0 steps=970 elapsed=54.8s tokens_per_sec=72487.6 loss=10.7272
+worker=0 device=cuda:0 steps=980 elapsed=55.4s tokens_per_sec=72462.1 loss=10.7826
+worker=0 device=cuda:0 steps=990 elapsed=56.0s tokens_per_sec=72417.5 loss=10.7270
+worker=0 device=cuda:0 steps=1000 elapsed=56.6s tokens_per_sec=72376.1 loss=10.7366
+worker=0 device=cuda:0 steps=1010 elapsed=57.2s tokens_per_sec=72333.1 loss=10.7273
+worker=0 device=cuda:0 steps=1020 elapsed=57.8s tokens_per_sec=72294.9 loss=10.7278
+worker=0 device=cuda:0 steps=1030 elapsed=58.4s tokens_per_sec=72251.9 loss=10.7449
+worker=0 device=cuda:0 steps=1040 elapsed=59.0s tokens_per_sec=72213.3 loss=10.7223
+worker=0 device=cuda:0 steps=1050 elapsed=59.6s tokens_per_sec=72176.0 loss=10.7254
+worker=0 device=cuda:0 steps=1060 elapsed=60.2s tokens_per_sec=72134.1 loss=10.7464
+worker=0 device=cuda:0 steps=1070 elapsed=60.8s tokens_per_sec=72099.9 loss=10.7405
+worker=0 device=cuda:0 steps=1080 elapsed=61.4s tokens_per_sec=72064.1 loss=10.7654
+worker=0 device=cuda:0 steps=1090 elapsed=62.0s tokens_per_sec=72030.7 loss=10.7088
+worker=0 device=cuda:0 steps=1100 elapsed=62.6s tokens_per_sec=71995.6 loss=10.7036
+worker=0 device=cuda:0 steps=1110 elapsed=63.2s tokens_per_sec=71963.8 loss=10.7377
+worker=0 device=cuda:0 steps=1120 elapsed=63.8s tokens_per_sec=71929.0 loss=10.7055
+worker=0 device=cuda:0 steps=1130 elapsed=64.4s tokens_per_sec=71898.6 loss=10.7686
+worker=0 device=cuda:0 steps=1140 elapsed=65.0s tokens_per_sec=71866.5 loss=10.7133
+worker=0 device=cuda:0 steps=1150 elapsed=65.6s tokens_per_sec=71836.1 loss=10.6824
+worker=0 device=cuda:0 steps=1160 elapsed=66.2s tokens_per_sec=71805.3 loss=10.7213
+worker=0 device=cuda:0 steps=1170 elapsed=66.8s tokens_per_sec=71776.3 loss=10.7010
+worker=0 device=cuda:0 steps=1180 elapsed=67.4s tokens_per_sec=71743.2 loss=10.6866
+worker=0 device=cuda:0 steps=1190 elapsed=68.0s tokens_per_sec=71697.1 loss=10.6902
+worker=0 device=cuda:0 steps=1200 elapsed=68.6s tokens_per_sec=71666.1 loss=10.6997
+worker=0 device=cuda:0 steps=1210 elapsed=69.2s tokens_per_sec=71641.4 loss=10.6941
+worker=0 device=cuda:0 steps=1220 elapsed=69.8s tokens_per_sec=71614.2 loss=10.7195
+worker=0 device=cuda:0 steps=1230 elapsed=70.4s tokens_per_sec=71586.9 loss=10.7457
+worker=0 device=cuda:0 steps=1240 elapsed=71.0s tokens_per_sec=71561.6 loss=10.7160
+worker=0 device=cuda:0 steps=1250 elapsed=71.6s tokens_per_sec=71535.3 loss=10.6676
+worker=0 device=cuda:0 steps=1260 elapsed=72.2s tokens_per_sec=71510.2 loss=10.6900
+worker=0 device=cuda:0 steps=1270 elapsed=72.8s tokens_per_sec=71484.2 loss=10.6910
+worker=0 device=cuda:0 steps=1280 elapsed=73.4s tokens_per_sec=71458.0 loss=10.6821
+worker=0 device=cuda:0 steps=1290 elapsed=73.9s tokens_per_sec=71453.5 loss=10.6592
+worker=0 device=cuda:0 steps=1300 elapsed=74.5s tokens_per_sec=71428.9 loss=10.7299
+worker=0 device=cuda:0 steps=1310 elapsed=75.1s tokens_per_sec=71406.4 loss=10.7105
+worker=0 device=cuda:0 steps=1320 elapsed=75.7s tokens_per_sec=71383.0 loss=10.6637
+worker=0 device=cuda:0 steps=1330 elapsed=76.3s tokens_per_sec=71359.9 loss=10.6519
+worker=0 device=cuda:0 steps=1340 elapsed=76.9s tokens_per_sec=71337.2 loss=10.6742
+worker=0 device=cuda:0 steps=1350 elapsed=77.5s tokens_per_sec=71314.5 loss=10.7105
+worker=0 device=cuda:0 steps=1360 elapsed=78.1s tokens_per_sec=71281.2 loss=10.6783
+worker=0 device=cuda:0 steps=1370 elapsed=78.8s tokens_per_sec=71250.4 loss=10.6749
+worker=0 device=cuda:0 steps=1380 elapsed=79.4s tokens_per_sec=71234.5 loss=10.6930
+worker=0 device=cuda:0 steps=1390 elapsed=79.9s tokens_per_sec=71212.6 loss=10.6558
+worker=0 device=cuda:0 steps=1400 elapsed=80.5s tokens_per_sec=71192.7 loss=10.6530
+worker=0 device=cuda:0 steps=1410 elapsed=81.1s tokens_per_sec=71171.2 loss=10.6509
+worker=0 device=cuda:0 steps=1420 elapsed=81.7s tokens_per_sec=71151.0 loss=10.6884
+worker=0 device=cuda:0 steps=1430 elapsed=82.3s tokens_per_sec=71130.3 loss=10.6839
+worker=0 device=cuda:0 steps=1440 elapsed=82.9s tokens_per_sec=71111.1 loss=10.6681
+worker=0 device=cuda:0 steps=1450 elapsed=83.5s tokens_per_sec=71092.2 loss=10.6839
+worker=0 device=cuda:0 steps=1460 elapsed=84.1s tokens_per_sec=71072.5 loss=10.7042
+worker=0 device=cuda:0 steps=1470 elapsed=84.7s tokens_per_sec=71054.1 loss=10.6726
+worker=0 device=cuda:0 steps=1480 elapsed=85.3s tokens_per_sec=71034.7 loss=10.6732
+worker=0 device=cuda:0 steps=1490 elapsed=85.9s tokens_per_sec=71017.0 loss=10.6721
+worker=0 device=cuda:0 steps=1500 elapsed=86.5s tokens_per_sec=70992.3 loss=10.6837
+worker=0 device=cuda:0 steps=1510 elapsed=87.2s tokens_per_sec=70964.9 loss=10.6752
+worker=0 device=cuda:0 steps=1520 elapsed=87.8s tokens_per_sec=70935.9 loss=10.7057
+worker=0 device=cuda:0 steps=1530 elapsed=88.4s tokens_per_sec=70906.2 loss=10.6869
+worker=0 device=cuda:0 steps=1540 elapsed=89.0s tokens_per_sec=70881.3 loss=10.6623
+worker=0 device=cuda:0 steps=1550 elapsed=89.6s tokens_per_sec=70869.9 loss=10.7336
+worker=0 device=cuda:0 steps=1560 elapsed=90.2s tokens_per_sec=70853.7 loss=10.6668
+worker=0 device=cuda:0 steps=1570 elapsed=90.8s tokens_per_sec=70832.2 loss=10.6867
+worker=0 device=cuda:0 steps=1580 elapsed=91.4s tokens_per_sec=70804.3 loss=10.6704
+worker=0 device=cuda:0 steps=1590 elapsed=92.0s tokens_per_sec=70775.4 loss=10.6325
+worker=0 device=cuda:0 steps=1600 elapsed=92.6s tokens_per_sec=70748.5 loss=10.7245
+worker=0 device=cuda:0 steps=1610 elapsed=93.2s tokens_per_sec=70721.3 loss=10.6755
+worker=0 device=cuda:0 steps=1620 elapsed=93.9s tokens_per_sec=70694.5 loss=10.6535
+worker=0 device=cuda:0 steps=1630 elapsed=94.4s tokens_per_sec=70697.0 loss=10.6778
+worker=0 device=cuda:0 steps=1640 elapsed=95.0s tokens_per_sec=70682.1 loss=10.6801
+worker=0 device=cuda:0 steps=1650 elapsed=95.6s tokens_per_sec=70660.3 loss=10.6752
+worker=0 device=cuda:0 steps=1660 elapsed=96.3s tokens_per_sec=70634.8 loss=10.6434
+worker=0 device=cuda:0 steps=1670 elapsed=96.9s tokens_per_sec=70609.7 loss=10.6756
+worker=0 device=cuda:0 steps=1680 elapsed=97.5s tokens_per_sec=70584.7 loss=10.6616
+worker=0 device=cuda:0 steps=1690 elapsed=98.1s tokens_per_sec=70558.8 loss=10.6706
+worker=0 device=cuda:0 steps=1700 elapsed=98.7s tokens_per_sec=70535.2 loss=10.6903
+worker=0 device=cuda:0 steps=1710 elapsed=99.3s tokens_per_sec=70508.6 loss=10.6870
+worker=0 device=cuda:0 steps=1720 elapsed=100.0s tokens_per_sec=70484.9 loss=10.6582
+worker=0 device=cuda:0 steps=1730 elapsed=100.6s tokens_per_sec=70461.2 loss=10.7125
+worker=0 device=cuda:0 steps=1740 elapsed=101.2s tokens_per_sec=70438.0 loss=10.6582
+worker=0 device=cuda:0 steps=1750 elapsed=101.8s tokens_per_sec=70415.1 loss=10.6565
+worker=0 device=cuda:0 steps=1760 elapsed=102.4s tokens_per_sec=70392.0 loss=10.6401
+worker=0 device=cuda:0 steps=1770 elapsed=103.0s tokens_per_sec=70369.0 loss=10.6567
+worker=0 device=cuda:0 steps=1780 elapsed=103.6s tokens_per_sec=70346.3 loss=10.6642
+worker=0 device=cuda:0 steps=1790 elapsed=104.3s tokens_per_sec=70324.0 loss=10.6830
+worker=0 device=cuda:0 steps=1800 elapsed=104.8s tokens_per_sec=70321.7 loss=10.6722
+worker=0 device=cuda:0 steps=1810 elapsed=105.4s tokens_per_sec=70309.1 loss=10.6670
+worker=0 device=cuda:0 steps=1820 elapsed=106.0s tokens_per_sec=70296.7 loss=10.6685
+worker=0 device=cuda:0 steps=1830 elapsed=106.7s tokens_per_sec=70279.9 loss=10.7173
+worker=0 device=cuda:0 steps=1840 elapsed=107.3s tokens_per_sec=70259.9 loss=10.6752
+worker=0 device=cuda:0 steps=1850 elapsed=107.9s tokens_per_sec=70248.8 loss=10.6521
+worker=0 device=cuda:0 steps=1860 elapsed=108.5s tokens_per_sec=70238.1 loss=10.6684
+worker=0 device=cuda:0 steps=1870 elapsed=109.1s tokens_per_sec=70227.0 loss=10.6705
+worker=0 device=cuda:0 steps=1880 elapsed=109.7s tokens_per_sec=70223.6 loss=10.6648
+worker=0 device=cuda:0 steps=1890 elapsed=110.3s tokens_per_sec=70213.3 loss=10.6543
+worker=0 device=cuda:0 steps=1900 elapsed=110.9s tokens_per_sec=70203.2 loss=10.7113
+worker=0 device=cuda:0 steps=1910 elapsed=111.5s tokens_per_sec=70192.1 loss=10.7140
+worker=0 device=cuda:0 steps=1920 elapsed=112.1s tokens_per_sec=70182.5 loss=10.6886
+worker=0 device=cuda:0 steps=1930 elapsed=112.7s tokens_per_sec=70172.9 loss=10.6550
+worker=0 device=cuda:0 steps=1940 elapsed=113.3s tokens_per_sec=70162.8 loss=10.6670
+worker=0 device=cuda:0 steps=1950 elapsed=113.9s tokens_per_sec=70148.9 loss=10.6552
+worker=0 device=cuda:0 steps=1960 elapsed=114.5s tokens_per_sec=70129.8 loss=10.6599
+worker=0 device=cuda:0 steps=1970 elapsed=115.1s tokens_per_sec=70126.7 loss=10.6438
+worker=0 device=cuda:0 steps=1980 elapsed=115.7s tokens_per_sec=70116.7 loss=10.6570
+worker=0 device=cuda:0 steps=1990 elapsed=116.3s tokens_per_sec=70098.1 loss=10.6651
+worker=0 device=cuda:0 steps=2000 elapsed=116.9s tokens_per_sec=70080.3 loss=10.6505
+worker=0 device=cuda:0 steps=2010 elapsed=117.5s tokens_per_sec=70061.4 loss=10.6819
+worker=0 device=cuda:0 steps=2020 elapsed=118.1s tokens_per_sec=70043.2 loss=10.6478
+worker=0 device=cuda:0 steps=2030 elapsed=118.7s tokens_per_sec=70024.8 loss=10.6820
+worker=0 device=cuda:0 steps=2040 elapsed=119.4s tokens_per_sec=70006.7 loss=10.6630
+worker=0 device=cuda:0 steps=2050 elapsed=120.0s tokens_per_sec=69998.7 loss=10.6316
+worker=0 device=cuda:0 steps=2060 elapsed=120.6s tokens_per_sec=69989.9 loss=10.6720
+worker=0 device=cuda:0 steps=2070 elapsed=121.2s tokens_per_sec=69981.9 loss=10.6513
+worker=0 device=cuda:0 steps=2080 elapsed=121.8s tokens_per_sec=69971.6 loss=10.6597
+worker=0 device=cuda:0 steps=2090 elapsed=122.4s tokens_per_sec=69961.8 loss=10.7537
+worker=0 device=cuda:0 steps=2100 elapsed=123.0s tokens_per_sec=69945.8 loss=10.6869
+worker=0 device=cuda:0 steps=2110 elapsed=123.6s tokens_per_sec=69929.3 loss=10.6569
+worker=0 device=cuda:0 steps=2120 elapsed=124.2s tokens_per_sec=69912.4 loss=10.6769
+worker=0 device=cuda:0 steps=2130 elapsed=124.8s tokens_per_sec=69895.2 loss=10.6802
+worker=0 device=cuda:0 steps=2140 elapsed=125.4s tokens_per_sec=69878.4 loss=10.6590
+worker=0 device=cuda:0 steps=2150 elapsed=126.1s tokens_per_sec=69861.5 loss=10.6585
+worker=0 device=cuda:0 steps=2160 elapsed=126.7s tokens_per_sec=69845.6 loss=10.6602
+worker=0 device=cuda:0 steps=2170 elapsed=127.3s tokens_per_sec=69828.9 loss=10.6577
+worker=0 device=cuda:0 steps=2180 elapsed=127.9s tokens_per_sec=69813.6 loss=10.6856
+worker=0 device=cuda:0 steps=2190 elapsed=128.5s tokens_per_sec=69798.3 loss=10.6702
+worker=0 device=cuda:0 steps=2200 elapsed=129.1s tokens_per_sec=69782.4 loss=10.6552
+worker=0 device=cuda:0 steps=2210 elapsed=129.7s tokens_per_sec=69766.7 loss=10.7504
+worker=0 device=cuda:0 steps=2220 elapsed=130.3s tokens_per_sec=69764.5 loss=10.6559
+worker=0 device=cuda:0 steps=2230 elapsed=130.9s tokens_per_sec=69755.7 loss=10.6962
+worker=0 device=cuda:0 steps=2240 elapsed=131.5s tokens_per_sec=69748.8 loss=10.7081
+worker=0 device=cuda:0 steps=2250 elapsed=132.1s tokens_per_sec=69742.2 loss=10.6625
+worker=0 device=cuda:0 steps=2260 elapsed=132.7s tokens_per_sec=69734.8 loss=10.6697
+worker=0 device=cuda:0 steps=2270 elapsed=133.3s tokens_per_sec=69726.2 loss=10.6589
+worker=0 device=cuda:0 steps=2280 elapsed=134.0s tokens_per_sec=69711.4 loss=10.6352
+worker=0 device=cuda:0 steps=2290 elapsed=134.6s tokens_per_sec=69696.6 loss=10.6520
+worker=0 device=cuda:0 steps=2300 elapsed=135.2s tokens_per_sec=69691.9 loss=10.6695
+worker=0 device=cuda:0 steps=2310 elapsed=135.8s tokens_per_sec=69686.0 loss=10.6804
+worker=0 device=cuda:0 steps=2320 elapsed=136.4s tokens_per_sec=69674.6 loss=10.6593
+worker=0 device=cuda:0 steps=2330 elapsed=137.0s tokens_per_sec=69660.5 loss=10.6575
+worker=0 device=cuda:0 steps=2340 elapsed=137.6s tokens_per_sec=69646.6 loss=10.6355
+worker=0 device=cuda:0 steps=2350 elapsed=138.2s tokens_per_sec=69632.0 loss=10.6794
+worker=0 device=cuda:0 steps=2360 elapsed=138.9s tokens_per_sec=69618.5 loss=10.6534
+worker=0 device=cuda:0 steps=2370 elapsed=139.5s tokens_per_sec=69604.5 loss=10.6817
+worker=0 device=cuda:0 steps=2380 elapsed=140.1s tokens_per_sec=69590.5 loss=10.6531
+worker=0 device=cuda:0 steps=2390 elapsed=140.7s tokens_per_sec=69576.6 loss=10.6731
+worker=0 device=cuda:0 steps=2400 elapsed=141.3s tokens_per_sec=69563.4 loss=10.6771
+worker=0 device=cuda:0 steps=2410 elapsed=141.9s tokens_per_sec=69552.2 loss=10.6514
+worker=0 device=cuda:0 steps=2420 elapsed=142.5s tokens_per_sec=69546.9 loss=10.6491
+worker=0 device=cuda:0 steps=2430 elapsed=143.1s tokens_per_sec=69540.5 loss=10.6809
+worker=0 device=cuda:0 steps=2440 elapsed=143.7s tokens_per_sec=69533.2 loss=10.6340
+worker=0 device=cuda:0 steps=2450 elapsed=144.3s tokens_per_sec=69528.8 loss=10.7570
+worker=0 device=cuda:0 steps=2460 elapsed=144.9s tokens_per_sec=69539.4 loss=10.6667
+worker=0 device=cuda:0 steps=2470 elapsed=145.5s tokens_per_sec=69551.7 loss=10.6926
+worker=0 device=cuda:0 steps=2480 elapsed=146.1s tokens_per_sec=69550.6 loss=10.6883
+worker=0 device=cuda:0 steps=2490 elapsed=146.7s tokens_per_sec=69543.3 loss=10.6412
+worker=0 device=cuda:0 steps=2500 elapsed=147.3s tokens_per_sec=69531.5 loss=10.6773
+worker=0 device=cuda:0 steps=2510 elapsed=147.9s tokens_per_sec=69518.2 loss=10.6815
+worker=0 device=cuda:0 steps=2520 elapsed=148.5s tokens_per_sec=69506.2 loss=10.6489
+worker=0 device=cuda:0 steps=2530 elapsed=149.1s tokens_per_sec=69493.5 loss=10.6931
+worker=0 device=cuda:0 steps=2540 elapsed=149.7s tokens_per_sec=69480.6 loss=10.6431
+worker=0 device=cuda:0 steps=2550 elapsed=150.3s tokens_per_sec=69478.8 loss=10.6446
+worker=0 device=cuda:0 steps=2560 elapsed=150.9s tokens_per_sec=69488.7 loss=10.7033
+worker=0 device=cuda:0 steps=2570 elapsed=151.5s tokens_per_sec=69482.9 loss=10.6917
+worker=0 device=cuda:0 steps=2580 elapsed=152.1s tokens_per_sec=69476.4 loss=10.6478
+worker=0 device=cuda:0 steps=2590 elapsed=152.7s tokens_per_sec=69464.1 loss=10.6607
+worker=0 device=cuda:0 steps=2600 elapsed=153.3s tokens_per_sec=69451.9 loss=10.6475
+worker=0 device=cuda:0 steps=2610 elapsed=154.0s tokens_per_sec=69439.7 loss=10.6506
+worker=0 device=cuda:0 steps=2620 elapsed=154.6s tokens_per_sec=69427.6 loss=10.6548
+worker=0 device=cuda:0 steps=2630 elapsed=155.2s tokens_per_sec=69415.6 loss=10.6802
+worker=0 device=cuda:0 steps=2640 elapsed=155.8s tokens_per_sec=69403.5 loss=10.6537
+worker=0 device=cuda:0 steps=2650 elapsed=156.4s tokens_per_sec=69391.3 loss=10.6525
+worker=0 device=cuda:0 steps=2660 elapsed=157.0s tokens_per_sec=69380.4 loss=10.6902
+worker=0 device=cuda:0 steps=2670 elapsed=157.7s tokens_per_sec=69368.6 loss=10.7100
+worker=0 device=cuda:0 steps=2680 elapsed=158.3s tokens_per_sec=69357.1 loss=10.6499
+worker=0 device=cuda:0 steps=2690 elapsed=158.9s tokens_per_sec=69345.7 loss=10.6564
+worker=0 device=cuda:0 steps=2700 elapsed=159.5s tokens_per_sec=69334.1 loss=10.6622
+worker=0 device=cuda:0 steps=2710 elapsed=160.1s tokens_per_sec=69323.5 loss=10.6501
+worker=0 device=cuda:0 steps=2720 elapsed=160.7s tokens_per_sec=69312.0 loss=10.6364
+worker=0 device=cuda:0 steps=2730 elapsed=161.4s tokens_per_sec=69301.0 loss=10.6609
+worker=0 device=cuda:0 steps=2740 elapsed=162.0s tokens_per_sec=69290.0 loss=10.6726
+worker=0 device=cuda:0 steps=2750 elapsed=162.6s tokens_per_sec=69278.9 loss=10.6308
+worker=0 device=cuda:0 steps=2760 elapsed=163.2s tokens_per_sec=69268.1 loss=10.6419
+worker=0 device=cuda:0 steps=2770 elapsed=163.8s tokens_per_sec=69256.9 loss=10.6688
+worker=0 device=cuda:0 steps=2780 elapsed=164.4s tokens_per_sec=69246.4 loss=10.6726
+worker=0 device=cuda:0 steps=2790 elapsed=165.1s tokens_per_sec=69235.9 loss=10.6571
+worker=0 device=cuda:0 steps=2800 elapsed=165.7s tokens_per_sec=69225.4 loss=10.6379
+worker=0 device=cuda:0 steps=2810 elapsed=166.3s tokens_per_sec=69213.5 loss=10.6628
+worker=0 device=cuda:0 steps=2820 elapsed=166.9s tokens_per_sec=69203.3 loss=10.6681
+worker=0 device=cuda:0 steps=2830 elapsed=167.5s tokens_per_sec=69192.9 loss=10.6639
+worker=0 device=cuda:0 steps=2840 elapsed=168.1s tokens_per_sec=69182.5 loss=10.6565
+worker=0 device=cuda:0 steps=2850 elapsed=168.8s tokens_per_sec=69172.2 loss=10.6363
+worker=0 device=cuda:0 steps=2860 elapsed=169.4s tokens_per_sec=69162.2 loss=10.6842
+worker=0 device=cuda:0 steps=2870 elapsed=170.0s tokens_per_sec=69152.1 loss=10.7019
+worker=0 device=cuda:0 steps=2880 elapsed=170.6s tokens_per_sec=69142.1 loss=10.6531
+worker=0 device=cuda:0 steps=2890 elapsed=171.2s tokens_per_sec=69140.6 loss=10.6453
+worker=0 device=cuda:0 steps=2900 elapsed=171.8s tokens_per_sec=69135.0 loss=10.6847
+worker=0 device=cuda:0 steps=2910 elapsed=172.4s tokens_per_sec=69125.8 loss=10.6478
+worker=0 device=cuda:0 steps=2920 elapsed=173.0s tokens_per_sec=69116.1 loss=10.6646
+worker=0 device=cuda:0 steps=2930 elapsed=173.7s tokens_per_sec=69106.4 loss=10.6593
+worker=0 device=cuda:0 steps=2940 elapsed=174.3s tokens_per_sec=69096.3 loss=10.6798
+worker=0 device=cuda:0 steps=2950 elapsed=174.9s tokens_per_sec=69086.9 loss=10.6647
+worker=0 device=cuda:0 steps=2960 elapsed=175.5s tokens_per_sec=69077.1 loss=10.7267
+worker=0 device=cuda:0 steps=2970 elapsed=176.1s tokens_per_sec=69074.0 loss=10.6609
+worker=0 device=cuda:0 steps=2980 elapsed=176.7s tokens_per_sec=69071.0 loss=10.6799
+worker=0 device=cuda:0 steps=2990 elapsed=177.3s tokens_per_sec=69063.1 loss=10.7107
+worker=0 device=cuda:0 steps=3000 elapsed=177.9s tokens_per_sec=69053.8 loss=10.6614
+worker=0 device=cuda:0 steps=3010 elapsed=178.6s tokens_per_sec=69045.0 loss=10.6752
+worker=0 device=cuda:0 steps=3020 elapsed=179.2s tokens_per_sec=69035.9 loss=10.6850
+worker=0 device=cuda:0 steps=3030 elapsed=179.8s tokens_per_sec=69027.1 loss=10.6455
+worker=0 device=cuda:0 steps=3040 elapsed=180.4s tokens_per_sec=69018.0 loss=10.6791
+worker=0 device=cuda:0 steps=3050 elapsed=181.0s tokens_per_sec=69009.4 loss=10.6467
+worker=0 device=cuda:0 steps=3060 elapsed=181.6s tokens_per_sec=69007.8 loss=10.6525
+worker=0 device=cuda:0 steps=3070 elapsed=182.2s tokens_per_sec=69001.9 loss=10.6434
+worker=0 device=cuda:0 steps=3080 elapsed=182.9s tokens_per_sec=68993.2 loss=10.6453
+worker=0 device=cuda:0 steps=3090 elapsed=183.5s tokens_per_sec=68984.5 loss=10.6787
+worker=0 device=cuda:0 steps=3100 elapsed=184.1s tokens_per_sec=68984.9 loss=10.6755
+worker=0 device=cuda:0 steps=3110 elapsed=184.7s tokens_per_sec=68981.7 loss=10.6744
+worker=0 device=cuda:0 steps=3120 elapsed=185.3s tokens_per_sec=68978.0 loss=10.6704
+worker=0 device=cuda:0 steps=3130 elapsed=185.9s tokens_per_sec=68973.4 loss=10.6596
+worker=0 device=cuda:0 steps=3140 elapsed=186.5s tokens_per_sec=68974.4 loss=10.6426
+worker=0 device=cuda:0 steps=3150 elapsed=187.1s tokens_per_sec=68971.2 loss=10.6406
+worker=0 device=cuda:0 steps=3160 elapsed=187.7s tokens_per_sec=68963.0 loss=10.6497
+worker=0 device=cuda:0 steps=3170 elapsed=188.3s tokens_per_sec=68954.8 loss=10.6591
+worker=0 device=cuda:0 steps=3180 elapsed=188.9s tokens_per_sec=68946.4 loss=10.6364
+worker=0 device=cuda:0 steps=3190 elapsed=189.5s tokens_per_sec=68938.3 loss=10.6423
+worker=0 device=cuda:0 steps=3200 elapsed=190.2s tokens_per_sec=68930.1 loss=10.6641
+worker=0 device=cuda:0 steps=3210 elapsed=190.8s tokens_per_sec=68922.2 loss=10.6736
+worker=0 device=cuda:0 steps=3220 elapsed=191.4s tokens_per_sec=68913.8 loss=10.6512
+worker=0 device=cuda:0 steps=3230 elapsed=192.0s tokens_per_sec=68905.9 loss=10.6696
+worker=0 device=cuda:0 steps=3240 elapsed=192.6s tokens_per_sec=68897.6 loss=10.6575
+worker=0 device=cuda:0 steps=3250 elapsed=193.2s tokens_per_sec=68889.8 loss=10.7188
+worker=0 device=cuda:0 steps=3260 elapsed=193.9s tokens_per_sec=68881.9 loss=10.6322
+worker=0 device=cuda:0 steps=3270 elapsed=194.5s tokens_per_sec=68874.2 loss=10.6609
+worker=0 device=cuda:0 steps=3280 elapsed=195.1s tokens_per_sec=68866.3 loss=10.6971
+worker=0 device=cuda:0 steps=3290 elapsed=195.7s tokens_per_sec=68858.5 loss=10.6390
+worker=0 device=cuda:0 steps=3300 elapsed=196.3s tokens_per_sec=68850.5 loss=10.6507
+worker=0 device=cuda:0 steps=3310 elapsed=196.9s tokens_per_sec=68842.7 loss=10.6486
+worker=0 device=cuda:0 steps=3320 elapsed=197.6s tokens_per_sec=68835.1 loss=10.6608
+worker=0 device=cuda:0 steps=3330 elapsed=198.2s tokens_per_sec=68826.9 loss=10.6536
+worker=0 device=cuda:0 steps=3340 elapsed=198.8s tokens_per_sec=68819.3 loss=10.6429
+worker=0 device=cuda:0 steps=3350 elapsed=199.4s tokens_per_sec=68811.6 loss=10.6475
+worker=0 device=cuda:0 steps=3360 elapsed=200.0s tokens_per_sec=68804.7 loss=10.6571
+worker=0 device=cuda:0 steps=3370 elapsed=200.6s tokens_per_sec=68802.9 loss=10.6419
+worker=0 device=cuda:0 steps=3380 elapsed=201.2s tokens_per_sec=68800.9 loss=10.6447
+worker=0 device=cuda:0 steps=3390 elapsed=201.8s tokens_per_sec=68802.9 loss=10.6318
+worker=0 device=cuda:0 steps=3400 elapsed=202.4s tokens_per_sec=68800.4 loss=10.6814
+worker=0 device=cuda:0 steps=3410 elapsed=203.0s tokens_per_sec=68794.4 loss=10.6497
+worker=0 device=cuda:0 steps=3420 elapsed=203.6s tokens_per_sec=68787.9 loss=10.6433
+worker=0 device=cuda:0 steps=3430 elapsed=204.3s tokens_per_sec=68783.8 loss=10.6391
+worker=0 device=cuda:0 steps=3440 elapsed=204.9s tokens_per_sec=68776.7 loss=10.6647
+worker=0 device=cuda:0 steps=3450 elapsed=205.5s tokens_per_sec=68769.6 loss=10.6245
+worker=0 device=cuda:0 steps=3460 elapsed=206.1s tokens_per_sec=68762.1 loss=10.6493
+worker=0 device=cuda:0 steps=3470 elapsed=206.7s tokens_per_sec=68763.5 loss=10.6804
+worker=0 device=cuda:0 steps=3480 elapsed=207.3s tokens_per_sec=68776.0 loss=10.6432
+worker=0 device=cuda:0 steps=3490 elapsed=207.8s tokens_per_sec=68787.6 loss=10.6690
+worker=0 device=cuda:0 steps=3500 elapsed=208.4s tokens_per_sec=68799.6 loss=10.6400
+worker=0 device=cuda:0 steps=3510 elapsed=208.9s tokens_per_sec=68811.4 loss=10.6752
+worker=0 device=cuda:0 steps=3520 elapsed=209.5s tokens_per_sec=68823.3 loss=10.6432
+worker=0 device=cuda:0 steps=3530 elapsed=210.1s tokens_per_sec=68834.9 loss=10.6553
+worker=0 device=cuda:0 steps=3540 elapsed=210.6s tokens_per_sec=68846.9 loss=10.6325
+worker=0 device=cuda:0 steps=3550 elapsed=211.2s tokens_per_sec=68849.4 loss=10.6414
+worker=0 device=cuda:0 steps=3560 elapsed=211.8s tokens_per_sec=68843.3 loss=10.6504
+worker=0 device=cuda:0 steps=3570 elapsed=212.4s tokens_per_sec=68836.5 loss=10.6380
+worker=0 device=cuda:0 steps=3580 elapsed=213.0s tokens_per_sec=68829.6 loss=10.6596
+worker=0 device=cuda:0 steps=3590 elapsed=213.7s tokens_per_sec=68822.3 loss=10.6343
+worker=0 device=cuda:0 steps=3600 elapsed=214.3s tokens_per_sec=68816.2 loss=10.6971
+worker=0 device=cuda:0 steps=3610 elapsed=214.9s tokens_per_sec=68809.7 loss=10.6433
+worker=0 device=cuda:0 steps=3620 elapsed=215.5s tokens_per_sec=68802.8 loss=10.6662
+worker=0 device=cuda:0 steps=3630 elapsed=216.1s tokens_per_sec=68796.2 loss=10.7153
+worker=0 device=cuda:0 steps=3640 elapsed=216.7s tokens_per_sec=68789.3 loss=10.6384
+worker=0 device=cuda:0 steps=3650 elapsed=217.3s tokens_per_sec=68790.9 loss=10.6292
+worker=0 device=cuda:0 steps=3660 elapsed=217.9s tokens_per_sec=68788.9 loss=10.6511
+worker=0 device=cuda:0 steps=3670 elapsed=218.5s tokens_per_sec=68783.8 loss=10.6286
+worker=0 device=cuda:0 steps=3680 elapsed=219.2s tokens_per_sec=68777.6 loss=10.6324
+worker=0 device=cuda:0 steps=3690 elapsed=219.8s tokens_per_sec=68771.1 loss=10.6545
+worker=0 device=cuda:0 steps=3700 elapsed=220.4s tokens_per_sec=68764.6 loss=10.6414
+worker=0 device=cuda:0 steps=3710 elapsed=221.0s tokens_per_sec=68758.3 loss=10.6418
+worker=0 device=cuda:0 steps=3720 elapsed=221.6s tokens_per_sec=68751.8 loss=10.7068
+worker=0 device=cuda:0 steps=3730 elapsed=222.2s tokens_per_sec=68749.9 loss=10.6442
+worker=0 device=cuda:0 steps=3740 elapsed=222.8s tokens_per_sec=68748.2 loss=10.6421
+worker=0 device=cuda:0 steps=3750 elapsed=223.4s tokens_per_sec=68746.9 loss=10.6717
+worker=0 device=cuda:0 steps=3760 elapsed=224.0s tokens_per_sec=68745.2 loss=10.6822
+worker=0 device=cuda:0 steps=3770 elapsed=224.6s tokens_per_sec=68743.3 loss=10.6464
+worker=0 device=cuda:0 steps=3780 elapsed=225.2s tokens_per_sec=68737.1 loss=10.6564
+worker=0 device=cuda:0 steps=3790 elapsed=225.9s tokens_per_sec=68730.8 loss=10.6268
+worker=0 device=cuda:0 steps=3800 elapsed=226.5s tokens_per_sec=68725.0 loss=10.6501
+worker=0 device=cuda:0 steps=3810 elapsed=227.1s tokens_per_sec=68718.6 loss=10.6510
+worker=0 device=cuda:0 steps=3820 elapsed=227.7s tokens_per_sec=68712.8 loss=10.6688
+worker=0 device=cuda:0 steps=3830 elapsed=228.3s tokens_per_sec=68706.9 loss=10.6396
+worker=0 device=cuda:0 steps=3840 elapsed=228.9s tokens_per_sec=68701.4 loss=10.6469
+worker=0 device=cuda:0 steps=3850 elapsed=229.6s tokens_per_sec=68695.8 loss=10.6514
+worker=0 device=cuda:0 steps=3860 elapsed=230.2s tokens_per_sec=68689.9 loss=10.6634
+worker=0 device=cuda:0 steps=3870 elapsed=230.8s tokens_per_sec=68684.2 loss=10.6707
+worker=0 device=cuda:0 steps=3880 elapsed=231.4s tokens_per_sec=68678.6 loss=10.6404
+worker=0 device=cuda:0 steps=3890 elapsed=232.0s tokens_per_sec=68672.8 loss=10.6405
+worker=0 device=cuda:0 steps=3900 elapsed=232.6s tokens_per_sec=68673.4 loss=10.6721
+worker=0 device=cuda:0 steps=3910 elapsed=233.2s tokens_per_sec=68672.1 loss=10.6284
+worker=0 device=cuda:0 steps=3920 elapsed=233.8s tokens_per_sec=68671.2 loss=10.6398
+worker=0 device=cuda:0 steps=3930 elapsed=234.4s tokens_per_sec=68668.2 loss=10.6432
+worker=0 device=cuda:0 steps=3940 elapsed=235.0s tokens_per_sec=68662.8 loss=10.6333
+worker=0 device=cuda:0 steps=3950 elapsed=235.7s tokens_per_sec=68657.1 loss=10.6736
+worker=0 device=cuda:0 steps=3960 elapsed=236.3s tokens_per_sec=68651.5 loss=10.6449
+worker=0 device=cuda:0 steps=3970 elapsed=236.9s tokens_per_sec=68645.9 loss=10.6575
+worker=0 device=cuda:0 steps=3980 elapsed=237.5s tokens_per_sec=68645.1 loss=10.6482
+worker=0 device=cuda:0 steps=3990 elapsed=238.1s tokens_per_sec=68644.6 loss=10.6066
+worker=0 device=cuda:0 steps=4000 elapsed=238.7s tokens_per_sec=68642.5 loss=10.6623
+worker=0 device=cuda:0 steps=4010 elapsed=239.3s tokens_per_sec=68637.6 loss=10.6230
+worker=0 device=cuda:0 steps=4020 elapsed=239.9s tokens_per_sec=68632.2 loss=10.6415
+worker=0 device=cuda:0 steps=4030 elapsed=240.5s tokens_per_sec=68626.5 loss=10.6407
+worker=0 device=cuda:0 steps=4040 elapsed=241.1s tokens_per_sec=68621.3 loss=10.6489
+worker=0 device=cuda:0 steps=4050 elapsed=241.8s tokens_per_sec=68618.4 loss=10.6516
+worker=0 device=cuda:0 steps=4060 elapsed=242.4s tokens_per_sec=68618.3 loss=10.6629
+worker=0 device=cuda:0 steps=4070 elapsed=242.9s tokens_per_sec=68629.8 loss=10.6395
+worker=0 device=cuda:0 steps=4080 elapsed=243.5s tokens_per_sec=68633.2 loss=10.6372
+worker=0 device=cuda:0 steps=4090 elapsed=244.1s tokens_per_sec=68632.5 loss=10.6535
+worker=0 device=cuda:0 steps=4100 elapsed=244.7s tokens_per_sec=68631.2 loss=10.6630
+worker=0 device=cuda:0 steps=4110 elapsed=245.3s tokens_per_sec=68630.0 loss=10.6656
+worker=0 device=cuda:0 steps=4120 elapsed=245.9s tokens_per_sec=68629.4 loss=10.6383
+worker=0 device=cuda:0 steps=4130 elapsed=246.5s tokens_per_sec=68628.4 loss=10.6271
+worker=0 device=cuda:0 steps=4140 elapsed=247.1s tokens_per_sec=68627.4 loss=10.6438
+worker=0 device=cuda:0 steps=4150 elapsed=247.7s tokens_per_sec=68632.1 loss=10.6458
+worker=0 device=cuda:0 steps=4160 elapsed=248.2s tokens_per_sec=68639.7 loss=10.6382
+worker=0 device=cuda:0 steps=4170 elapsed=248.8s tokens_per_sec=68639.1 loss=10.6268
+worker=0 device=cuda:0 steps=4180 elapsed=249.5s tokens_per_sec=68634.7 loss=10.6424
+worker=0 device=cuda:0 steps=4190 elapsed=250.1s tokens_per_sec=68630.0 loss=10.6527
+worker=0 device=cuda:0 steps=4200 elapsed=250.7s tokens_per_sec=68624.9 loss=10.6354
+worker=0 device=cuda:0 steps=4210 elapsed=251.3s tokens_per_sec=68621.2 loss=10.6515
+worker=0 device=cuda:0 steps=4220 elapsed=251.9s tokens_per_sec=68620.2 loss=10.6676
+worker=0 device=cuda:0 steps=4230 elapsed=252.5s tokens_per_sec=68619.0 loss=10.6302
+worker=0 device=cuda:0 steps=4240 elapsed=253.1s tokens_per_sec=68618.3 loss=10.6354
+worker=0 device=cuda:0 steps=4250 elapsed=253.7s tokens_per_sec=68617.3 loss=10.6747
+worker=0 device=cuda:0 steps=4260 elapsed=254.3s tokens_per_sec=68616.2 loss=10.6584
+worker=0 device=cuda:0 steps=4270 elapsed=254.9s tokens_per_sec=68612.4 loss=10.6362
+worker=0 device=cuda:0 steps=4280 elapsed=255.5s tokens_per_sec=68607.4 loss=10.6324
+worker=0 device=cuda:0 steps=4290 elapsed=256.1s tokens_per_sec=68605.1 loss=10.6685
+worker=0 device=cuda:0 steps=4300 elapsed=256.7s tokens_per_sec=68600.9 loss=10.6540
+worker=0 device=cuda:0 steps=4310 elapsed=257.4s tokens_per_sec=68596.1 loss=10.6907
+worker=0 device=cuda:0 steps=4320 elapsed=258.0s tokens_per_sec=68591.1 loss=10.6360
+worker=0 device=cuda:0 steps=4330 elapsed=258.6s tokens_per_sec=68586.3 loss=10.6805
+worker=0 device=cuda:0 steps=4340 elapsed=259.2s tokens_per_sec=68581.3 loss=10.6428
+worker=0 device=cuda:0 steps=4350 elapsed=259.8s tokens_per_sec=68576.7 loss=10.6316
+worker=0 device=cuda:0 steps=4360 elapsed=260.4s tokens_per_sec=68572.3 loss=10.6161
+worker=0 device=cuda:0 steps=4370 elapsed=261.0s tokens_per_sec=68567.5 loss=10.6373
+worker=0 device=cuda:0 steps=4380 elapsed=261.7s tokens_per_sec=68563.0 loss=10.6385
+worker=0 device=cuda:0 steps=4390 elapsed=262.3s tokens_per_sec=68558.4 loss=10.6415
+worker=0 device=cuda:0 steps=4400 elapsed=262.9s tokens_per_sec=68553.4 loss=10.6083
+worker=0 device=cuda:0 steps=4410 elapsed=263.5s tokens_per_sec=68548.8 loss=10.6224
+worker=0 device=cuda:0 steps=4420 elapsed=264.1s tokens_per_sec=68543.9 loss=10.6660
+worker=0 device=cuda:0 steps=4430 elapsed=264.7s tokens_per_sec=68539.6 loss=10.6180
+worker=0 device=cuda:0 steps=4440 elapsed=265.4s tokens_per_sec=68535.1 loss=10.6772
+worker=0 device=cuda:0 steps=4450 elapsed=266.0s tokens_per_sec=68532.5 loss=10.6716
+worker=0 device=cuda:0 steps=4460 elapsed=266.6s tokens_per_sec=68531.9 loss=10.6234
+worker=0 device=cuda:0 steps=4470 elapsed=267.2s tokens_per_sec=68531.4 loss=10.6330
+worker=0 device=cuda:0 steps=4480 elapsed=267.8s tokens_per_sec=68530.6 loss=10.6501
+worker=0 device=cuda:0 steps=4490 elapsed=268.4s tokens_per_sec=68531.0 loss=10.6582
+worker=0 device=cuda:0 steps=4500 elapsed=269.0s tokens_per_sec=68530.1 loss=10.6358
+worker=0 device=cuda:0 steps=4510 elapsed=269.6s tokens_per_sec=68529.1 loss=10.6385
+worker=0 device=cuda:0 steps=4520 elapsed=270.2s tokens_per_sec=68524.7 loss=10.6357
+worker=0 device=cuda:0 steps=4530 elapsed=270.8s tokens_per_sec=68520.0 loss=10.6492
+worker=0 device=cuda:0 steps=4540 elapsed=271.4s tokens_per_sec=68516.1 loss=10.6249
+worker=0 device=cuda:0 steps=4550 elapsed=272.0s tokens_per_sec=68515.6 loss=10.6346
+worker=0 device=cuda:0 steps=4560 elapsed=272.6s tokens_per_sec=68515.3 loss=10.6339
+worker=0 device=cuda:0 steps=4570 elapsed=273.2s tokens_per_sec=68519.0 loss=10.6414
+worker=0 device=cuda:0 steps=4580 elapsed=273.7s tokens_per_sec=68528.7 loss=10.6304
+worker=0 device=cuda:0 steps=4590 elapsed=274.3s tokens_per_sec=68532.2 loss=10.6342
+worker=0 device=cuda:0 steps=4600 elapsed=274.9s tokens_per_sec=68531.4 loss=10.6555
+worker=0 device=cuda:0 steps=4610 elapsed=275.5s tokens_per_sec=68527.5 loss=10.6230
+worker=0 device=cuda:0 steps=4620 elapsed=276.2s tokens_per_sec=68523.1 loss=10.6679
+worker=0 device=cuda:0 steps=4630 elapsed=276.8s tokens_per_sec=68519.4 loss=10.6411
+worker=0 device=cuda:0 steps=4640 elapsed=277.4s tokens_per_sec=68515.3 loss=10.6309
+worker=0 device=cuda:0 steps=4650 elapsed=278.0s tokens_per_sec=68511.3 loss=10.6345
+worker=0 device=cuda:0 steps=4660 elapsed=278.6s tokens_per_sec=68512.1 loss=10.6659
+worker=0 device=cuda:0 steps=4670 elapsed=279.2s tokens_per_sec=68511.4 loss=10.6452
+worker=0 device=cuda:0 steps=4680 elapsed=279.8s tokens_per_sec=68511.0 loss=10.6479
+worker=0 device=cuda:0 steps=4690 elapsed=280.4s tokens_per_sec=68510.5 loss=10.6339
+worker=0 device=cuda:0 steps=4700 elapsed=281.0s tokens_per_sec=68510.1 loss=10.6797
+worker=0 device=cuda:0 steps=4710 elapsed=281.6s tokens_per_sec=68509.3 loss=10.6361
+worker=0 device=cuda:0 steps=4720 elapsed=282.2s tokens_per_sec=68509.3 loss=10.6356
+worker=0 device=cuda:0 steps=4730 elapsed=282.8s tokens_per_sec=68508.7 loss=10.6223
+worker=0 device=cuda:0 steps=4740 elapsed=283.4s tokens_per_sec=68511.7 loss=10.6335
+worker=0 device=cuda:0 steps=4750 elapsed=283.9s tokens_per_sec=68522.2 loss=10.6389
+worker=0 device=cuda:0 steps=4760 elapsed=284.5s tokens_per_sec=68524.8 loss=10.6504
+worker=0 device=cuda:0 steps=4770 elapsed=285.1s tokens_per_sec=68524.5 loss=10.6704
+worker=0 device=cuda:0 steps=4780 elapsed=285.7s tokens_per_sec=68524.2 loss=10.6147
+worker=0 device=cuda:0 steps=4790 elapsed=286.3s tokens_per_sec=68520.4 loss=10.6344
+worker=0 device=cuda:0 steps=4800 elapsed=286.9s tokens_per_sec=68519.1 loss=10.6329
+worker=0 device=cuda:0 steps=4810 elapsed=287.5s tokens_per_sec=68518.7 loss=10.6915
+worker=0 device=cuda:0 steps=4820 elapsed=288.1s tokens_per_sec=68518.8 loss=10.6449
+worker=0 device=cuda:0 steps=4830 elapsed=288.7s tokens_per_sec=68526.3 loss=10.6457
+worker=0 device=cuda:0 steps=4840 elapsed=289.3s tokens_per_sec=68533.4 loss=10.6471
+worker=0 device=cuda:0 steps=4850 elapsed=289.9s tokens_per_sec=68532.9 loss=10.6285
+worker=0 device=cuda:0 steps=4860 elapsed=290.5s tokens_per_sec=68532.7 loss=10.6485
+worker=0 device=cuda:0 steps=4870 elapsed=291.1s tokens_per_sec=68532.2 loss=10.6262
+worker=0 device=cuda:0 steps=4880 elapsed=291.7s tokens_per_sec=68531.9 loss=10.6339
+worker=0 device=cuda:0 steps=4890 elapsed=292.3s tokens_per_sec=68531.5 loss=10.6328
+worker=0 device=cuda:0 steps=4900 elapsed=292.9s tokens_per_sec=68527.7 loss=10.6472
+worker=0 device=cuda:0 steps=4910 elapsed=293.5s tokens_per_sec=68523.9 loss=10.6594
+worker=0 device=cuda:0 steps=4920 elapsed=294.1s tokens_per_sec=68519.9 loss=10.6231
+worker=0 device=cuda:0 steps=4930 elapsed=294.7s tokens_per_sec=68517.1 loss=10.6046
+worker=0 device=cuda:0 steps=4940 elapsed=295.3s tokens_per_sec=68515.7 loss=10.6500
+worker=0 device=cuda:0 steps=4950 elapsed=295.9s tokens_per_sec=68511.8 loss=10.6756
+worker=0 device=cuda:0 steps=4960 elapsed=296.6s tokens_per_sec=68508.1 loss=10.6279
+worker=0 device=cuda:0 steps=4970 elapsed=297.2s tokens_per_sec=68504.4 loss=10.6239
+worker=0 device=cuda:0 steps=4980 elapsed=297.8s tokens_per_sec=68500.7 loss=10.7004
+worker=0 device=cuda:0 steps=4990 elapsed=298.4s tokens_per_sec=68496.7 loss=10.6492
+worker=0 device=cuda:0 steps=5000 elapsed=299.0s tokens_per_sec=68497.7 loss=10.6336
+worker=0 device=cuda:0 steps=5010 elapsed=299.6s tokens_per_sec=68497.5 loss=10.6373
+done workers=1 wall_elapsed=306.9s tokens_per_second=68497.3 parameters=185710592
+summary_json=results/dl-model-comparison/502044_dl-a100-1/summary.json
+GPU monitor samples: results/dl-model-comparison/502044_dl-a100-1/nvidia_smi.csv
+2026/05/26 16:09:11.702, 3, NVIDIA A100-PCIE-40GB, 90, 52, 6405, 40960, 269.50, 250.00, 68
+2026/05/26 16:09:16.837, 3, NVIDIA A100-PCIE-40GB, 86, 51, 6405, 40960, 266.91, 250.00, 68
+2026/05/26 16:09:21.945, 3, NVIDIA A100-PCIE-40GB, 88, 51, 6405, 40960, 253.51, 250.00, 68
+2026/05/26 16:09:27.058, 3, NVIDIA A100-PCIE-40GB, 90, 51, 6405, 40960, 269.16, 250.00, 68
+2026/05/26 16:09:32.162, 3, NVIDIA A100-PCIE-40GB, 92, 54, 6405, 40960, 264.13, 250.00, 68
+2026/05/26 16:09:37.266, 3, NVIDIA A100-PCIE-40GB, 87, 51, 6405, 40960, 249.84, 250.00, 67
+2026/05/26 16:09:42.352, 3, NVIDIA A100-PCIE-40GB, 89, 52, 6405, 40960, 216.43, 250.00, 67
+2026/05/26 16:09:47.461, 3, NVIDIA A100-PCIE-40GB, 90, 52, 6405, 40960, 253.75, 250.00, 67
+2026/05/26 16:09:52.594, 3, NVIDIA A100-PCIE-40GB, 86, 51, 6405, 40960, 247.68, 250.00, 66
+2026/05/26 16:09:57.722, 3, NVIDIA A100-PCIE-40GB, 86, 52, 6405, 40960, 280.06, 250.00, 67
+Result directory: results/dl-model-comparison/502044_dl-a100-1
+Summary JSON: results/dl-model-comparison/502044_dl-a100-1/summary.json
