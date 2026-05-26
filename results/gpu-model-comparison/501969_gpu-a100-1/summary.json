@@ -1,0 +1,37 @@
+{
+  "aggregate_tflops": 190.12821824422514,
+  "cuda_visible_devices": "1",
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "8.0",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 108,
+      "name": "NVIDIA A100-PCIE-40GB",
+      "total_memory_gib": 39.4935302734375,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "matrix_memory_per_tensor_gib": 0.125,
+  "schema_version": 1,
+  "seconds": 300,
+  "size": 8192,
+  "slurm_job_id": "501969",
+  "slurm_job_name": "gpu-a100-1",
+  "slurm_job_nodelist": "ctit089",
+  "wall_elapsed_seconds": 302.7355752000585,
+  "workers": [
+    {
+      "avg_tflops": 190.12821824422514,
+      "device": "cuda:0",
+      "elapsed_seconds": 300.1377386720851,
+      "iterations": 51900,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 0
+    }
+  ],
+  "working_set_total_gib": 0.375
+}

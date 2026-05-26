@@ -1,0 +1,37 @@
+{
+  "aggregate_tflops": 76.5145801170012,
+  "cuda_visible_devices": "2",
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "8.6",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 84,
+      "name": "NVIDIA A40",
+      "total_memory_gib": 44.423828125,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "matrix_memory_per_tensor_gib": 0.125,
+  "schema_version": 1,
+  "seconds": 300,
+  "size": 8192,
+  "slurm_job_id": "501970",
+  "slurm_job_name": "gpu-a40-1",
+  "slurm_job_nodelist": "ctit090",
+  "wall_elapsed_seconds": 302.66620144294575,
+  "workers": [
+    {
+      "avg_tflops": 76.5145801170012,
+      "device": "cuda:0",
+      "elapsed_seconds": 300.33221100317314,
+      "iterations": 20900,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 0
+    }
+  ],
+  "working_set_total_gib": 0.375
+}

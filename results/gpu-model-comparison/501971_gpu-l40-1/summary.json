@@ -1,0 +1,37 @@
+{
+  "aggregate_tflops": 82.06087643760758,
+  "cuda_visible_devices": "2",
+  "device_count": 1,
+  "devices": [
+    {
+      "capability": "8.9",
+      "device": "cuda:0",
+      "logical_index": 0,
+      "multiprocessors": 142,
+      "name": "NVIDIA L40",
+      "total_memory_gib": 44.39404296875,
+      "type": "cuda"
+    }
+  ],
+  "dtype": "float16",
+  "matrix_memory_per_tensor_gib": 0.125,
+  "schema_version": 1,
+  "seconds": 300,
+  "size": 8192,
+  "slurm_job_id": "501971",
+  "slurm_job_name": "gpu-l40-1",
+  "slurm_job_nodelist": "hpc-node07",
+  "wall_elapsed_seconds": 303.5231697410345,
+  "workers": [
+    {
+      "avg_tflops": 82.06087643760758,
+      "device": "cuda:0",
+      "elapsed_seconds": 300.13157952204347,
+      "iterations": 22400,
+      "peak_allocated_gib": 0.3829345703125,
+      "peak_reserved_gib": 0.39453125,
+      "worker_id": 0
+    }
+  ],
+  "working_set_total_gib": 0.375
+}

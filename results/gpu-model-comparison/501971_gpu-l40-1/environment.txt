@@ -1,0 +1,14 @@
+Date: Tue May 26 14:39:17 CEST 2026
+Node: hpc-node07
+Submit dir: /home/yuanw/test-mod
+CUDA_VISIBLE_DEVICES=2
+SLURM_JOB_ID=501971
+SLURM_JOB_NAME=gpu-l40-1
+SLURM_JOB_NODELIST=hpc-node07
+SLURM_GPUS=
+SLURM_GPUS_ON_NODE=1
+SLURM_JOB_GPUS=2
+PYTHON_MODULE=python/3.10.7
+CUDA_MODULE=nvidia/cuda-11.0
+Currently Loaded Modulefiles:
+ 1) python/3.10.7   2) slurm/utils   3) monitor/node   4) nvidia/cuda-11.0  
