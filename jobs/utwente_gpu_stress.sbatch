@@ -20,12 +20,18 @@ echo "GPU_MONITOR_INTERVAL=${GPU_MONITOR_INTERVAL:-5}"
 
 cd "${SLURM_SUBMIT_DIR}"
 
-# Adjust this to the CUDA/Python modules available on the cluster.
-# Run `module avail cuda` and `module avail python` on the login node first.
-# module load nvidia/cuda-12.1
-# module load python/3.10
+# UT currently exposes Python modules but no CUDA module on the login node.
+# PyTorch CUDA wheels bundle the CUDA runtime; the GPU node provides the driver.
+module load "${PYTHON_MODULE:-python/3.10.7}"
 
-python3 -c "import torch; print('torch', torch.__version__)"
+if [ -x ".venv/bin/python" ]; then
+  PYTHON_BIN=".venv/bin/python"
+else
+  PYTHON_BIN="python3"
+fi
+
+echo "Python: $(${PYTHON_BIN} --version)"
+"${PYTHON_BIN}" -c "import torch; print('torch', torch.__version__); print('torch_cuda_runtime', torch.version.cuda); print('torch_cuda_available', torch.cuda.is_available())"
 nvidia-smi
 
 gpu_monitor_file="gpu_${SLURM_JOB_ID}_nvidia_smi.csv"
@@ -46,7 +52,7 @@ monitor_gpu > "${gpu_monitor_file}" &
 monitor_pid=$!
 trap 'kill "${monitor_pid}" 2>/dev/null || true' EXIT
 
-python3 scripts/gpu_stress.py \
+"${PYTHON_BIN}" scripts/gpu_stress.py \
   --seconds "${GPU_STRESS_SECONDS:-600}" \
   --size "${GPU_STRESS_SIZE:-8192}" \
   --dtype "${GPU_STRESS_DTYPE:-float16}" \

@@ -30,12 +30,26 @@ Connect to the login node:
 ssh <ut-username>@hpc-head1.ewi.utwente.nl
 ```
 
-Inspect available modules and adjust `jobs/utwente_gpu_stress.sbatch` if the
-cluster uses different module names:
+Inspect available Python modules:
 
 ```bash
-module avail cuda
 module avail python
+```
+
+At the time this was written, the login node exposed `python/3.7.3`,
+`python/3.9.9`, and `python/3.10.7`, but no CUDA module. That is fine for this
+job: CUDA-enabled PyTorch wheels bundle the CUDA runtime, and the allocated GPU
+compute node provides the NVIDIA driver.
+
+Create the Python environment once on the login node:
+
+```bash
+cd ~/test-mod
+module load python/3.10.7
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
 Submit the GPU job:
@@ -53,6 +67,11 @@ If this repo is pushed to GitHub, use this workflow on the HPC login node:
 ssh <ut-username>@hpc-head1.ewi.utwente.nl
 git clone https://github.com/alhazar43/test-mod.git ~/test-mod
 cd ~/test-mod
+module load python/3.10.7
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 sbatch jobs/utwente_gpu_stress.sbatch
 ```
 
@@ -81,7 +100,7 @@ tail -f gpu_<jobid>.out
 The Slurm output contains:
 
 - assigned node and `CUDA_VISIBLE_DEVICES`
-- GPU model, memory, compute capability, and Torch version
+- GPU model, memory, compute capability, Torch version, and Torch CUDA runtime
 - progress lines with approximate average TFLOPS
 - final peak PyTorch memory usage
 - the last samples from `nvidia-smi`
@@ -142,8 +161,10 @@ A healthy GPU run should show:
 - final `peak_allocated` and `peak_reserved` memory values
 
 If the job fails with CUDA unavailable, Slurm probably did not allocate a GPU or
-the CUDA/PyTorch environment is not loaded correctly. If it fails with an
-out-of-memory error, lower `GPU_STRESS_SIZE`.
+the installed PyTorch wheel is CPU-only. The Slurm log prints
+`torch_cuda_runtime` and `torch_cuda_available`; `torch_cuda_available` should be
+`True` inside the GPU job. If the job fails with an out-of-memory error, lower
+`GPU_STRESS_SIZE`.
 
 ## Repository Workflow
 
