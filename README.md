@@ -37,13 +37,17 @@ Inspect available modules:
 ```bash
 module avail
 module avail python
+module avail nvidia/cuda
 ```
 
-The cluster may expose CUDA toolkit modules such as `nvidia/cuda-11.0`. Those
-are useful when you need `nvcc` or need to build custom CUDA extensions. This
-PyTorch wheel job does not require loading a CUDA toolkit module: CUDA-enabled
-PyTorch wheels include the CUDA runtime, and the allocated GPU compute node
-provides the NVIDIA driver.
+UT HPC software is managed through Environment Modules. Load the Python and CUDA
+modules before creating environments or running jobs. The Slurm scripts load
+these by default:
+
+```bash
+module load python/3.10.7
+module load nvidia/cuda-11.0
+```
 
 Do not run `apt install`, and do not try to install NVIDIA drivers or system CUDA
 on `hpc-head1`. You normally do not have admin rights there, and the login node
@@ -66,6 +70,7 @@ Create the Python environment once on the login node:
 ```bash
 cd ~/test-mod
 module load python/3.10.7
+module load nvidia/cuda-11.0
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
@@ -73,17 +78,14 @@ python -m pip install -r requirements.txt
 ```
 
 `requirements.txt` installs PyTorch from the official CUDA 11.8 wheel index.
-This gives PyTorch a CUDA runtime without needing a system CUDA module. The
-official PyTorch installer documents this selector-based CUDA wheel workflow for
-Linux pip installs: https://pytorch.org/get-started/locally/
+The official PyTorch installer documents this selector-based CUDA wheel workflow
+for Linux pip installs: https://pytorch.org/get-started/locally/
 
-If you later need a toolkit module for compiling CUDA code, pass it explicitly:
+Override the module versions at submit time if needed:
 
 ```bash
-CUDA_MODULE=nvidia/cuda-11.0 sbatch jobs/utwente_gpu_stress.sbatch
+PYTHON_MODULE=python/3.10.7 CUDA_MODULE=nvidia/cuda-11.0 sbatch jobs/utwente_gpu_stress.sbatch
 ```
-
-For pure PyTorch runs, leave `CUDA_MODULE` unset.
 
 Submit the GPU job:
 
@@ -101,6 +103,7 @@ ssh <ut-username>@hpc-head1.ewi.utwente.nl
 git clone https://github.com/alhazar43/test-mod.git ~/test-mod
 cd ~/test-mod
 module load python/3.10.7
+module load nvidia/cuda-11.0
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip

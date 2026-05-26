@@ -15,6 +15,10 @@ echo "Node: $(hostname)"
 echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-}"
 echo "SLURM_JOB_ID=${SLURM_JOB_ID}"
 echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST}"
+echo "CUDA_MODULE=${CUDA_MODULE:-nvidia/cuda-11.0}"
+
+module load "${CUDA_MODULE:-nvidia/cuda-11.0}"
+module list
 
 which nvidia-smi
 nvidia-smi

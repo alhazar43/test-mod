@@ -17,17 +17,14 @@ echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-}"
 echo "SLURM_JOB_ID=${SLURM_JOB_ID}"
 echo "SLURM_JOB_NODELIST=${SLURM_JOB_NODELIST}"
 echo "GPU_MONITOR_INTERVAL=${GPU_MONITOR_INTERVAL:-5}"
+echo "PYTHON_MODULE=${PYTHON_MODULE:-python/3.10.7}"
+echo "CUDA_MODULE=${CUDA_MODULE:-nvidia/cuda-11.0}"
 
 cd "${SLURM_SUBMIT_DIR}"
 
 module load "${PYTHON_MODULE:-python/3.10.7}"
-
-# CUDA toolkit modules are optional for this PyTorch wheel job. Load one only if
-# you need nvcc or custom CUDA extensions, for example:
-#   CUDA_MODULE=nvidia/cuda-11.0 sbatch jobs/utwente_gpu_stress.sbatch
-if [ -n "${CUDA_MODULE:-}" ]; then
-  module load "${CUDA_MODULE}"
-fi
+module load "${CUDA_MODULE:-nvidia/cuda-11.0}"
+module list
 
 if [ -x ".venv/bin/python" ]; then
   PYTHON_BIN=".venv/bin/python"
