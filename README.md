@@ -148,7 +148,7 @@ gpu_<jobid>_nvidia_smi.csv
 ```
 
 That file includes timestamped utilization, memory, power, and temperature
-samples from the allocated GPU.
+samples from the GPU indexes listed in `CUDA_VISIBLE_DEVICES`.
 
 Inspect the monitor file:
 
@@ -255,6 +255,11 @@ A healthy GPU run should show:
 - nonzero power draw during the workload
 - progress lines with `avg_tflops`
 - final `peak_allocated` and `peak_reserved` memory values
+
+`nvidia-smi` reports physical GPU indexes. PyTorch reports logical CUDA indexes
+inside the job. Slurm maps the allocated physical GPUs into the process with
+`CUDA_VISIBLE_DEVICES`; for example, `CUDA_VISIBLE_DEVICES=3` means PyTorch
+`cuda:0` is physical GPU 3.
 
 If the job fails with CUDA unavailable, Slurm probably did not allocate a GPU or
 the installed PyTorch wheel is CPU-only. The Slurm log prints

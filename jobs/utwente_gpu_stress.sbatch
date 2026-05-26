@@ -37,14 +37,19 @@ echo "Python: $(${PYTHON_BIN} --version)"
 nvidia-smi
 
 gpu_monitor_file="gpu_${SLURM_JOB_ID}_nvidia_smi.csv"
+gpu_monitor_args=()
+if [ -n "${CUDA_VISIBLE_DEVICES:-}" ]; then
+  gpu_monitor_args=(-i "${CUDA_VISIBLE_DEVICES}")
+fi
+
 monitor_gpu() {
-  nvidia-smi \
+  nvidia-smi "${gpu_monitor_args[@]}" \
     --query-gpu=timestamp,index,name,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw,power.limit,temperature.gpu \
     --format=csv,nounits
 
   while true; do
     sleep "${GPU_MONITOR_INTERVAL:-5}"
-    nvidia-smi \
+    nvidia-smi "${gpu_monitor_args[@]}" \
       --query-gpu=timestamp,index,name,utilization.gpu,utilization.memory,memory.used,memory.total,power.draw,power.limit,temperature.gpu \
       --format=csv,nounits,noheader
   done
