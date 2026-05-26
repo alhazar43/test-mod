@@ -1,117 +1,43 @@
-This repo is for testing purposes.
+This repo is a UT HPC GPU benchmark and Slurm adaptation template.
 
-## UT HPC GPU Stress Job
+It has two purposes:
 
-This repo contains a small PyTorch workload for testing GPU allocation and load
-on the University of Twente HPC Slurm cluster. It runs repeated CUDA matrix
-multiplications, prints benchmark-style progress, and records `nvidia-smi`
-samples from the allocated GPU.
+1. Benchmark available GPUs on the UT HPC cluster.
+2. Provide a minimal pattern for adapting a local PyTorch training project to
+   run under Slurm.
 
-Use this only through Slurm. Log in to a head node, then submit the job; do not
-run GPU-heavy work directly on a login/head node.
+Do not run GPU-heavy work directly on `hpc-head1` or `hpc-head2`. Use the login
+node to edit files, install Python packages, submit jobs, and inspect results.
 
 ## Files
 
-- `scripts/gpu_stress.py`: configurable PyTorch GPU workload.
-- `scripts/dl_train_benchmark.py`: synthetic transformer training benchmark.
-- `jobs/utwente_gpu_stress.sbatch`: Slurm submission script for `main-gpu`.
-- `jobs/utwente_dl_train.sbatch`: Slurm submission script for transformer
-  training benchmarks.
-- `jobs/gpu_probe.sbatch`: minimal Slurm job that checks `nvidia-smi` on a GPU
-  node.
+- `jobs/gpu_probe.sbatch`: checks that a Slurm GPU allocation can see
+  `nvidia-smi`.
+- `jobs/utwente_gpu_stress.sbatch`: raw matrix-multiply GPU benchmark.
+- `jobs/utwente_dl_train.sbatch`: synthetic transformer training benchmark.
+- `scripts/gpu_stress.py`: raw tensor throughput workload.
+- `scripts/dl_train_benchmark.py`: forward/backward/optimizer training workload.
+- `scripts/submit_scaling_experiment.sh`: submits matched 1-GPU and 2-GPU
+  matrix jobs.
+- `scripts/submit_dl_repeats.sh`: submits repeated A100 vs L40S training jobs.
+- `scripts/compare_results.py`: compares individual `summary.json` files.
+- `scripts/summarize_results.py`: aggregates repeated runs with mean/std/SEM.
 - `requirements.txt`: CUDA-enabled PyTorch wheel dependency.
 
-## Quick Start With `rsync`
-
-Copy the repo from your local machine to the UT HPC login node:
-
-```bash
-rsync -av ./ <ut-username>@hpc-head1.ewi.utwente.nl:~/test-mod/
-```
-
-Connect to the login node:
-
-```bash
-ssh <ut-username>@hpc-head1.ewi.utwente.nl
-```
-
-Inspect available modules:
-
-```bash
-module avail
-module avail python
-module avail nvidia/cuda
-```
-
-UT HPC software is managed through Environment Modules. Load the Python and CUDA
-modules before creating environments or running jobs. The Slurm scripts load
-these by default:
-
-```bash
-module load python/3.10.7
-module load nvidia/cuda-11.0
-```
-
-Do not run `apt install`, and do not try to install NVIDIA drivers or system CUDA
-on `hpc-head1`. You normally do not have admin rights there, and the login node
-is not the GPU node. It is expected that this fails on the login node:
-
-```bash
-nvidia-smi
-```
-
-Check `nvidia-smi` through Slurm instead:
-
-```bash
-cd ~/test-mod
-sbatch jobs/gpu_probe.sbatch
-tail -f gpu_probe_<jobid>.out
-```
-
-Create the Python environment once on the login node:
-
-```bash
-cd ~/test-mod
-module load python/3.10.7
-module load nvidia/cuda-11.0
-python3 -m venv .venv
-. .venv/bin/activate
-python -m pip install --upgrade pip
-python -m pip install -r requirements.txt
-```
-
-`requirements.txt` installs PyTorch from the official CUDA 11.8 wheel index.
-The official PyTorch installer documents this selector-based CUDA wheel workflow
-for Linux pip installs: https://pytorch.org/get-started/locally/
-
-Override the module versions at submit time if needed:
-
-```bash
-PYTHON_MODULE=python/3.10.7 CUDA_MODULE=nvidia/cuda-11.0 sbatch jobs/utwente_gpu_stress.sbatch
-```
-
-Submit the GPU job:
-
-```bash
-cd ~/test-mod
-sbatch jobs/utwente_gpu_stress.sbatch
-```
-
-## Quick Start With Git
-
-If this repo is pushed to GitHub, use this workflow on the HPC login node:
+## Setup On HPC
 
 ```bash
 ssh <ut-username>@hpc-head1.ewi.utwente.nl
 git clone https://github.com/alhazar43/test-mod.git ~/test-mod
 cd ~/test-mod
+
 module load python/3.10.7
 module load nvidia/cuda-11.0
+
 python3 -m venv .venv
 . .venv/bin/activate
 python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
-sbatch jobs/utwente_gpu_stress.sbatch
 ```
 
 For later updates:
@@ -119,132 +45,52 @@ For later updates:
 ```bash
 cd ~/test-mod
 git pull
-sbatch jobs/utwente_gpu_stress.sbatch
+. .venv/bin/activate
 ```
 
-## Monitoring
+## Probe GPU Access
 
-Check queue state:
+`nvidia-smi` may not exist on the login node. Check it inside a Slurm GPU job:
 
 ```bash
-squeue -u "$USER"
+sbatch jobs/gpu_probe.sbatch
+tail -f gpu_probe_<jobid>.out
 ```
 
-Watch the Slurm job output:
-
-```bash
-tail -f gpu_<jobid>.out
-```
-
-The Slurm output contains:
-
-- assigned node and `CUDA_VISIBLE_DEVICES`
-- GPU model, memory, compute capability, Torch version, and Torch CUDA runtime
-- progress lines with approximate average TFLOPS
-- final peak PyTorch memory usage
-- the last samples from `nvidia-smi`
-
-The job also writes a CSV-style monitor file:
-
-```bash
-gpu_<jobid>_nvidia_smi.csv
-```
-
-That file includes timestamped utilization, memory, power, and temperature
-samples from the GPU indexes listed in `CUDA_VISIBLE_DEVICES`.
-
-Inspect the monitor file:
-
-```bash
-tail -n 20 gpu_<jobid>_nvidia_smi.csv
-```
-
-Use the UT dashboard at http://hpc-status.ewi.utwente.nl/slurm/ to inspect your
-running job. For your user ID:
+Check queue and completed jobs:
 
 ```bash
 squeue -u yuanw
-squeue -j <jobid>
-```
-
-For completed jobs:
-
-```bash
 sacct -j <jobid> --format=JobID,JobName,Partition,State,ExitCode,Elapsed,NodeList,AllocTRES
 ```
 
-## Tuning
+## Benchmark: Raw GPU Throughput
 
-Tune the run without editing the Slurm file:
-
-```bash
-GPU_STRESS_SECONDS=1800 GPU_STRESS_SIZE=12288 sbatch jobs/utwente_gpu_stress.sbatch
-```
-
-Larger `GPU_STRESS_SIZE` values use more GPU memory and compute. If the job runs
-out of memory, reduce the size.
-
-## Scaling Experiment Scheme
-
-Use this when the question is whether two GPUs make this workload faster than
-one GPU. The helper submits matched 1-GPU and 2-GPU jobs with the same matrix
-size, dtype, duration, CUDA module, and Python environment:
+Single GPU:
 
 ```bash
-cd ~/test-mod
-git pull
-. .venv/bin/activate
-GPU_STRESS_SECONDS=300 GPU_STRESS_SIZE=8192 GPU_FAMILY=lovelace \
-  bash scripts/submit_scaling_experiment.sh
+EXPERIMENT_NAME=gpu-model-comparison GPU_STRESS_SECONDS=300 GPU_STRESS_SIZE=8192 \
+  sbatch --job-name gpu-a100-1 --gres=gpu:ampere:1 --constraint=a100 \
+  jobs/utwente_gpu_stress.sbatch
 ```
 
-This creates:
-
-```text
-results/<experiment-name>/manifest.tsv
-results/<experiment-name>/<jobid>_<jobname>/summary.json
-results/<experiment-name>/<jobid>_<jobname>/nvidia_smi.csv
-results/<experiment-name>/<jobid>_<jobname>/environment.txt
-```
-
-After both jobs complete:
+Two GPUs:
 
 ```bash
-squeue -u yuanw
-python scripts/compare_results.py results/<experiment-name> --markdown
+EXPERIMENT_NAME=gpu-scaling-l40 GPU_STRESS_SECONDS=300 GPU_STRESS_SIZE=8192 \
+  sbatch --job-name gpu-l40-2 --gres=gpu:lovelace:2 --constraint=l40 \
+  --sockets-per-node=1 jobs/utwente_gpu_stress.sbatch
 ```
 
-Then commit the result artifacts from the HPC login node:
+Compare results:
 
 ```bash
-git add results/<experiment-name>
-git commit -m "Add GPU scaling results"
-git push origin main
+python scripts/compare_results.py results/gpu-model-comparison --markdown
 ```
 
-On your local machine:
+## Benchmark: Transformer Training
 
-```bash
-git pull
-python scripts/compare_results.py results/<experiment-name> --markdown
-```
-
-The script reports aggregate TFLOPS and speedup relative to the smallest GPU
-count in the result set. More GPUs only mean faster computation when the workload
-is actually parallelized across GPUs. This benchmark uses one worker process per
-allocated GPU, which is an embarrassingly parallel scaling test. A real model or
-simulation may need data parallelism, model parallelism, or domain decomposition
-to get similar speedup.
-
-## Deep Learning Training Benchmark
-
-The matrix benchmark measures raw tensor throughput. For a more realistic deep
-learning workload, use the synthetic transformer training benchmark. It performs
-embedding lookup, causal self-attention, MLP layers, cross-entropy loss,
-backpropagation, and AdamW optimizer steps. It uses synthetic token batches, so
-there is no dataset download.
-
-Run a short smoke test on one A100:
+Smoke test:
 
 ```bash
 EXPERIMENT_NAME=dl-smoke-a100 DL_SECONDS=120 \
@@ -252,7 +98,7 @@ EXPERIMENT_NAME=dl-smoke-a100 DL_SECONDS=120 \
   jobs/utwente_dl_train.sbatch
 ```
 
-Run comparable single-GPU DL benchmarks:
+Single-run model comparison:
 
 ```bash
 EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
@@ -262,39 +108,9 @@ EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
 EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
   sbatch --job-name dl-l40s-1 --gres=gpu:lovelace:1 --constraint=l40s \
   jobs/utwente_dl_train.sbatch
-
-EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
-  sbatch --job-name dl-l40-1 --gres=gpu:lovelace:1 --constraint=l40 \
-  jobs/utwente_dl_train.sbatch
-
-EXPERIMENT_NAME=dl-model-comparison DL_SECONDS=300 \
-  sbatch --job-name dl-a40-1 --gres=gpu:ampere:1 --constraint=a40 \
-  jobs/utwente_dl_train.sbatch
 ```
 
-The default transformer workload is:
-
-```text
-batch_size=4, seq_len=1024, vocab_size=32768, d_model=1024,
-layers=12, heads=16, dtype=float16
-```
-
-For a heavier model, increase batch size or depth after the smoke run:
-
-```bash
-EXPERIMENT_NAME=dl-heavy-a100 DL_SECONDS=300 DL_BATCH_SIZE=8 DL_LAYERS=16 \
-  sbatch --job-name dl-a100-heavy --gres=gpu:ampere:1 --constraint=a100 \
-  jobs/utwente_dl_train.sbatch
-```
-
-Compare DL results:
-
-```bash
-python scripts/compare_results.py results/dl-model-comparison --markdown
-```
-
-For a more rigorous A100 vs L40S comparison, run repeated heavier jobs with
-warmup excluded from measurement:
+Rigorous repeated comparison:
 
 ```bash
 EXPERIMENT_NAME=dl-rigorous-a100-l40s REPEATS=3 \
@@ -303,137 +119,172 @@ EXPERIMENT_NAME=dl-rigorous-a100-l40s REPEATS=3 \
   bash scripts/submit_dl_repeats.sh
 ```
 
-This submits A100 and L40S jobs for each repeat. Your `guest-research` QOS
-allows at most two GPUs at once, so Slurm may keep some repeats pending until
-earlier jobs finish. Monitor with:
-
-```bash
-squeue -u yuanw
-```
-
-Summarize repeated results with mean and standard deviation:
+Summarize repeated runs:
 
 ```bash
 python scripts/summarize_results.py results/dl-rigorous-a100-l40s --markdown
 ```
 
-Commit and push DL results the same way:
+## Result Workflow
+
+Each benchmark writes curated artifacts under:
+
+```text
+results/<experiment-name>/<jobid>_<jobname>/
+```
+
+Important files:
+
+- `summary.json`: machine-readable benchmark result.
+- `nvidia_smi.csv`: sampled GPU utilization, memory, power, temperature.
+- `environment.txt`: Slurm, module, CUDA, and job environment.
+
+Commit only result artifacts you want to study locally:
 
 ```bash
-git add results/dl-model-comparison
-git commit -m "Add deep learning GPU benchmark results"
+git add results/<experiment-name>
+git commit -m "Add benchmark results"
 git push origin main
 ```
 
-## Requesting More GPUs
-
-The UT wiki documents GPU requests as `gpu[:family]:amount`. The current default
-job requests one GPU:
+Then locally:
 
 ```bash
+git pull
+python3 scripts/summarize_results.py results/<experiment-name> --markdown
+```
+
+Raw Slurm stdout/stderr files are ignored by default.
+
+## GPU Selection
+
+Your `code` account can use `main-gpu`. Check available GPUs:
+
+```bash
+sinfo -p main-gpu -o "%P %N %G %f %t"
+```
+
+Useful constraints observed on `main-gpu`:
+
+- `--gres=gpu:ampere:1 --constraint=a100`
+- `--gres=gpu:ampere:1 --constraint=a40`
+- `--gres=gpu:ampere:1 --constraint=a4500`
+- `--gres=gpu:lovelace:1 --constraint=l40s`
+- `--gres=gpu:lovelace:1 --constraint=l40`
+- `--gres=gpu:turing:1 --constraint=rtx-6000`
+
+Other partitions may show H200NVL or RTX6000Pro GPUs, but your `code` account is
+not permitted on those partitions unless the HPC admins add access.
+
+Your `guest-research` QOS allows at most `gres/gpu=2` at once. If a job is
+pending with `QOSMaxGRESPerUser`, wait for current GPU jobs to finish or cancel
+one.
+
+## Adaptation Manual
+
+Use this section when turning a local PyTorch project into an HPC Slurm job.
+Environment and path details are intentionally left to the project owner.
+
+### 1. Make One Training Command
+
+Your project should have one command that starts training:
+
+```bash
+python train.py --config configs/train.yaml
+```
+
+Keep local paths, dataset paths, and output paths configurable through CLI args,
+config files, or environment variables.
+
+### 2. Copy A Slurm Template
+
+Start from `jobs/utwente_dl_train.sbatch` and replace the benchmark command:
+
+```bash
+"${PYTHON_BIN}" scripts/dl_train_benchmark.py ...
+```
+
+with your training command:
+
+```bash
+"${PYTHON_BIN}" train.py --config configs/train.yaml
+```
+
+Keep the useful Slurm wrapper pieces:
+
+```bash
+#SBATCH --partition=main-gpu
 #SBATCH --gres=gpu:1
+#SBATCH -c 8
+#SBATCH --mem=64G
+#SBATCH --time=02:00:00
+
+module load "${PYTHON_MODULE:-python/3.10.7}"
+module load "${CUDA_MODULE:-nvidia/cuda-11.0}"
+. .venv/bin/activate
+
+echo "CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-}"
+module list
+nvidia-smi
 ```
 
-Your current dashboard allocation showed `gres/gpu:lovelace=1` on `hpc-node04`.
-To ask Slurm for two Lovelace GPUs, override the Slurm request at submit time:
+### 3. Write Results Predictably
+
+Use one run directory per job:
 
 ```bash
-sbatch --gres=gpu:lovelace:2 jobs/utwente_gpu_stress.sbatch
+RUN_DIR="${RESULTS_ROOT:-results}/${EXPERIMENT_NAME:-manual}/${SLURM_JOB_ID}_${SLURM_JOB_NAME}"
+mkdir -p "${RUN_DIR}"
 ```
 
-Or request two GPUs without specifying family:
+Recommended artifacts:
+
+- `environment.txt`: modules, job ID, node, CUDA visibility.
+- `metrics.json` or `summary.json`: final metrics.
+- training logs/checkpoints as needed.
+
+### 4. Make GPU Use Explicit
+
+Slurm allocating a GPU does not automatically make code use it. Your code must
+move model and tensors to CUDA:
+
+```python
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+model.to(device)
+```
+
+For multiple GPUs, the code must explicitly support parallelism, for example
+DDP, FSDP, DeepSpeed, model parallelism, or domain decomposition. Requesting
+`--gres=gpu:2` alone does not make ordinary single-GPU code faster.
+
+### 5. Add Checkpoint/Resume
+
+HPC jobs can time out, fail, or be cancelled. Long jobs should periodically save
+state and support resume:
 
 ```bash
-sbatch --gres=gpu:2 jobs/utwente_gpu_stress.sbatch
+python train.py --config configs/train.yaml --resume <checkpoint>
 ```
 
-The Python workload uses all CUDA devices exposed by Slurm by default:
+### 6. Scale Only After A Smoke Test
 
-```bash
-GPU_STRESS_DEVICES=auto sbatch --gres=gpu:lovelace:2 jobs/utwente_gpu_stress.sbatch
-```
+Recommended progression:
 
-You can explicitly choose visible device indexes:
+1. CPU/import check if useful.
+2. Short 1-GPU Slurm job.
+3. Full 1-GPU job.
+4. Different GPU types.
+5. Multi-GPU only after the code supports it.
 
-```bash
-GPU_STRESS_DEVICES=0,1 sbatch --gres=gpu:lovelace:2 jobs/utwente_gpu_stress.sbatch
-```
+### 7. Compare Like With Like
 
-If you request two GPUs that should use NVLink, the UT wiki says to force socket
-binding:
+For benchmarks, keep workload parameters fixed across GPUs:
 
-```bash
-sbatch --gres=gpu:lovelace:2 --sockets-per-node=1 jobs/utwente_gpu_stress.sbatch
-```
+- same model/config
+- same batch size
+- same precision
+- same number of measured steps
+- same warmup policy
+- same dataset/input pipeline
 
-Queue time may increase when requesting more GPUs because Slurm must find one
-node with enough free GPUs.
-
-`lovelace` is a GPU family, not a claim that it is the strongest GPU available.
-On the UT hardware page, the main shared GPU partition includes many L40/L40S
-nodes, and those are Lovelace-generation GPUs. Stronger or larger-memory devices
-may exist under other features or restricted partitions, for example H200NVL or
-RTX6000Pro nodes, but access depends on partition/account permissions and current
-availability. For fair 1-vs-2 scaling, keep the GPU family/model fixed.
-
-Control the diagnostics cadence:
-
-```bash
-GPU_MONITOR_INTERVAL=2 GPU_STRESS_LOG_EVERY=5 sbatch jobs/utwente_gpu_stress.sbatch
-```
-
-Useful variables:
-
-- `GPU_STRESS_SECONDS`: workload duration in seconds. Default from Slurm script:
-  `600`.
-- `GPU_STRESS_SIZE`: square matrix size. Default: `8192`.
-- `GPU_STRESS_DTYPE`: one of `float16`, `float32`, or `bfloat16`. Default:
-  `float16`.
-- `GPU_STRESS_DEVICES`: `auto`, `all`, or comma-separated visible CUDA indexes
-  such as `0,1`. Default: `auto`.
-- `GPU_STRESS_LOG_EVERY`: print Python progress every N matrix multiplications.
-  Default: `10`.
-- `GPU_MONITOR_INTERVAL`: write `nvidia-smi` samples every N seconds. Default:
-  `5`.
-
-## Interpreting Results
-
-A healthy GPU run should show:
-
-- non-empty `CUDA_VISIBLE_DEVICES`
-- a real GPU name and total GPU memory
-- high `utilization.gpu` values in `gpu_<jobid>_nvidia_smi.csv`
-- nonzero power draw during the workload
-- progress lines with `avg_tflops`
-- final `peak_allocated` and `peak_reserved` memory values
-
-`nvidia-smi` reports physical GPU indexes. PyTorch reports logical CUDA indexes
-inside the job. Slurm maps the allocated physical GPUs into the process with
-`CUDA_VISIBLE_DEVICES`; for example, `CUDA_VISIBLE_DEVICES=3` means PyTorch
-`cuda:0` is physical GPU 3.
-
-If the job fails with CUDA unavailable, Slurm probably did not allocate a GPU or
-the installed PyTorch wheel is CPU-only. The Slurm log prints
-`torch_cuda_runtime` and `torch_cuda_available`; `torch_cuda_available` should be
-`True` inside the GPU job. If the job fails with an out-of-memory error, lower
-`GPU_STRESS_SIZE`.
-
-## Repository Workflow
-
-Using a remote Git repo is useful for this kind of work: keep code, Slurm files,
-and small config files in Git, then pull the same revision on the HPC login node.
-Do not commit generated logs, datasets, checkpoints, or benchmark output.
-
-Typical workflow:
-
-```bash
-# local machine
-git add README.md requirements.txt jobs/ scripts/ .gitignore
-git commit -m "Add UT HPC GPU stress job"
-git push
-
-# HPC login node
-git clone https://github.com/alhazar43/test-mod.git ~/test-mod
-cd ~/test-mod
-sbatch jobs/utwente_gpu_stress.sbatch
-```
+Then vary only GPU model or GPU count.
