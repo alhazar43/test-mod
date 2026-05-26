@@ -156,6 +156,20 @@ Inspect the monitor file:
 tail -n 20 gpu_<jobid>_nvidia_smi.csv
 ```
 
+Use the UT dashboard at http://hpc-status.ewi.utwente.nl/slurm/ to inspect your
+running job. For your user ID:
+
+```bash
+squeue -u yuanw
+squeue -j <jobid>
+```
+
+For completed jobs:
+
+```bash
+sacct -j <jobid> --format=JobID,JobName,Partition,State,ExitCode,Elapsed,NodeList,AllocTRES
+```
+
 ## Tuning
 
 Tune the run without editing the Slurm file:
@@ -166,6 +180,50 @@ GPU_STRESS_SECONDS=1800 GPU_STRESS_SIZE=12288 sbatch jobs/utwente_gpu_stress.sba
 
 Larger `GPU_STRESS_SIZE` values use more GPU memory and compute. If the job runs
 out of memory, reduce the size.
+
+## Requesting More GPUs
+
+The UT wiki documents GPU requests as `gpu[:family]:amount`. The current default
+job requests one GPU:
+
+```bash
+#SBATCH --gres=gpu:1
+```
+
+Your current dashboard allocation showed `gres/gpu:lovelace=1` on `hpc-node04`.
+To ask Slurm for two Lovelace GPUs, override the Slurm request at submit time:
+
+```bash
+sbatch --gres=gpu:lovelace:2 jobs/utwente_gpu_stress.sbatch
+```
+
+Or request two GPUs without specifying family:
+
+```bash
+sbatch --gres=gpu:2 jobs/utwente_gpu_stress.sbatch
+```
+
+The Python workload uses all CUDA devices exposed by Slurm by default:
+
+```bash
+GPU_STRESS_DEVICES=auto sbatch --gres=gpu:lovelace:2 jobs/utwente_gpu_stress.sbatch
+```
+
+You can explicitly choose visible device indexes:
+
+```bash
+GPU_STRESS_DEVICES=0,1 sbatch --gres=gpu:lovelace:2 jobs/utwente_gpu_stress.sbatch
+```
+
+If you request two GPUs that should use NVLink, the UT wiki says to force socket
+binding:
+
+```bash
+sbatch --gres=gpu:lovelace:2 --sockets-per-node=1 jobs/utwente_gpu_stress.sbatch
+```
+
+Queue time may increase when requesting more GPUs because Slurm must find one
+node with enough free GPUs.
 
 Control the diagnostics cadence:
 
@@ -180,6 +238,8 @@ Useful variables:
 - `GPU_STRESS_SIZE`: square matrix size. Default: `8192`.
 - `GPU_STRESS_DTYPE`: one of `float16`, `float32`, or `bfloat16`. Default:
   `float16`.
+- `GPU_STRESS_DEVICES`: `auto`, `all`, or comma-separated visible CUDA indexes
+  such as `0,1`. Default: `auto`.
 - `GPU_STRESS_LOG_EVERY`: print Python progress every N matrix multiplications.
   Default: `10`.
 - `GPU_MONITOR_INTERVAL`: write `nvidia-smi` samples every N seconds. Default:

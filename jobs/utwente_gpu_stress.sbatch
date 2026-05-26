@@ -58,6 +58,7 @@ trap 'kill "${monitor_pid}" 2>/dev/null || true' EXIT
   --seconds "${GPU_STRESS_SECONDS:-600}" \
   --size "${GPU_STRESS_SIZE:-8192}" \
   --dtype "${GPU_STRESS_DTYPE:-float16}" \
+  --devices "${GPU_STRESS_DEVICES:-auto}" \
   --log-every "${GPU_STRESS_LOG_EVERY:-10}"
 
 kill "${monitor_pid}" 2>/dev/null || true
